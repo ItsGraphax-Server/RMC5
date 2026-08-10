@@ -9,7 +9,9 @@ public class TokenListener implements HasPlugin, Listener {
     @EventHandler
     void onDeath(PlayerDeathEvent e) {
         for (int slot = 0; slot < 2; slot++) { // loop over slots
-            plugin.pdcData().setEquippedBroken(e.getPlayer(), slot, true);
+            if (plugin.pdcData().getEquippedToken(e.getPlayer(), slot) != TokenIdentifier.UNKNOWN) {
+                plugin.pdcData().setEquippedBroken(e.getPlayer(), slot, true);
+            }
         }
     }
 }
