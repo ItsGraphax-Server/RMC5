@@ -1,0 +1,10 @@
+name: RMC5
+version: '${version}'
+
+main: de.itsgraphax.rmc5.RmcPlugin
+bootstrapper: de.itsgraphax.rmc5.RmcPluginBootstrap
+api-version: '26.1.2'
+load: POSTWORLD
+
+authors: [ ItsGraphax ]
+website: https://itsgraphax.de

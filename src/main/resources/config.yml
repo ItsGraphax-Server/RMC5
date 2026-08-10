@@ -1,0 +1,19 @@
+tokens:
+  UNKNOWN:
+    cooldown: 1
+  FIRE:
+    cooldown: 2
+
+    # Active
+    strength: 2.65
+    speed: 2.0
+  CREAKING:
+    cooldown: 2
+
+    # Passive
+    chance: 0.05
+    duration: 7
+
+    # Active
+    radius: 15
+    activeDuration: 30
