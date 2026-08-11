@@ -40,9 +40,6 @@ public class Namespaces extends NamespacesBase {
         return key("token.cooldown." + id.id());
     }
 
-    public NamespacedKey pdcItemTokenId() {
-        return key("token.id");
-    }
     public NamespacedKey pdcItemTokenBroken() {
         return key("token.broken");
     }

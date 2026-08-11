@@ -37,10 +37,9 @@ public abstract class Token extends Citem implements HasPlugin, Listener {
     @Override
     public void onInteract(@NotNull PlayerInteractEvent event) {
         // equip
-        consume(event);
-
         ItemStack item = event.getItem();
         assert item != null;
+        //plugin.logger().info(String.valueOf(item.getPersistentDataContainer().get(plugin.namespaces().pdcItemTokenBroken(), PersistentDataType.BOOLEAN)));
         Player p = event.getPlayer();
 
         PdcData pdcData = plugin.pdcData();
@@ -58,6 +57,8 @@ public abstract class Token extends Citem implements HasPlugin, Listener {
         pdcData.setEquippedBroken(p, slot, broken);
 
         if (!broken) onEquip(p);
+
+        consume(event);
     }
 
     public boolean hasWorkingToken(Player p) {
@@ -117,7 +118,7 @@ public abstract class Token extends Citem implements HasPlugin, Listener {
 
     public String getSprite(Player p, int slot) {
         String broken = plugin.pdcData().getEquippedBroken(p, slot) ? "_broken" : "";
-            return String.format("items:rmc5/token%s/%s", broken, id.id().toLowerCase());
+        return String.format("items:rmc5/token%s/%s", broken, id.id().toLowerCase());
     }
 
     public TokenIdentifier id() {
@@ -139,17 +140,16 @@ public abstract class Token extends Citem implements HasPlugin, Listener {
 
         NamespacedKey newKey = new NamespacedKey(key.namespace(), key.getKey() + (broken ? "_broken" : ""));
 
-        item.setData(DataComponentTypes.ITEM_MODEL, newKey);
+        ret.setData(DataComponentTypes.ITEM_MODEL, newKey);
         Component translation = Component.translatable(newKey.getNamespace() + "." + newKey.getKey())
                 .decoration(TextDecoration.ITALIC, false);
-        item.setData(DataComponentTypes.CUSTOM_NAME, translation);
+        ret.setData(DataComponentTypes.ITEM_NAME, translation);
         return ret;
     }
 
     @Override
     public void setItem(@NotNull ItemStack item) {
         ItemStack copy = item.clone();
-        plugin.pdcData().setItemToken(copy, id);
         super.setItem(copy);
     }
 }

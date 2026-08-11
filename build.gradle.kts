@@ -17,7 +17,7 @@ dependencies {
     compileOnly("net.strokkur.commands:annotations-paper:2.1.4")
     annotationProcessor("net.strokkur.commands:processor-paper:2.1.4")
 
-    implementation("de.itsgraphax:GrphxLib:2.1.0")
+    implementation("de.itsgraphax:GrphxLib:2.1.1")
 }
 
 java {

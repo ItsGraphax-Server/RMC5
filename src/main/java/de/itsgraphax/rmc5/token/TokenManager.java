@@ -28,7 +28,7 @@ public class TokenManager implements HasPlugin {
     }
     public void reset(Player p) {
         for (TokenIdentifier id : idTokenMap.keySet()) {
-            plugin.pdcData().resetLasUse(p, id);
+            plugin.pdcData().resetLastUse(p, id);
         }
     }
 
