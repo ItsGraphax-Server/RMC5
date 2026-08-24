@@ -57,4 +57,19 @@ public class Debug implements HasPlugin {
     void reset(Player p) {
         plugin.tokenManager().reset(p);
     }
+
+    @Executes("getTraderTime")
+    void getTraderTime(CommandSender sender) {
+        Long next = plugin.getDataManager().getNextTrader();
+        if (next == null) {
+            sender.sendMessage("null");
+            return;
+        }
+        sender.sendMessage(String.valueOf((next - System.currentTimeMillis()) / 1000));
+    }
+
+    @Executes("setTraderTime")
+    void setTraderTime(int seconds) {
+        plugin.getDataManager().setNextTrader(System.currentTimeMillis() + (seconds * 1000L));
+    }
 }

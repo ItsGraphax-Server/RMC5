@@ -1,14 +1,17 @@
+maxRareCrafts: 1
+
 tokens:
   UNKNOWN:
     cooldown: 1
   FIRE:
-    cooldown: 2
+    cooldown: 90
 
     # Active
     strength: 2.65
     speed: 2.0
   CREAKING:
-    cooldown: 2
+    cooldown: 270
+    maxCrafts: 3
 
     # Passive
     chance: 0.05
@@ -16,4 +19,42 @@ tokens:
 
     # Active
     radius: 15
-    activeDuration: 30
+    activeDuration: 15
+  SMELTER:
+    cooldown: 210
+
+    # Passive
+    appliesTo:
+      - "WOODEN_PICKAXE"
+      - "COPPER_PICKAXE"
+      - "IRON_PICKAXE"
+      - "GOLD_PICKAXE"
+      - "DIAMOND_PICKAXE"
+      - "NETHERITE_PICKAXE"
+
+      - "WOODEN_SHOVEL"
+      - "COPPER_SHOVEL"
+      - "IRON_SHOVEL"
+      - "GOLD_SHOVEL"
+      - "DIAMOND_SHOVEL"
+      - "NETHERITE_SHOVEL"
+
+      - "WOODEN_AXE"
+      - "COPPER_AXE"
+      - "IRON_AXE"
+      - "GOLD_AXE"
+      - "DIAMOND_AXE"
+      - "NETHERITE_AXE"
+
+    # Active
+    duration: 30
+  AIR:
+    cooldown: 1
+
+    # Active
+    multiplier: 1
+    lift: 0.5
+
+trader:
+  min: 0
+  max: 1

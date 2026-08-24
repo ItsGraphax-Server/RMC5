@@ -1,6 +1,7 @@
-package de.itsgraphax.rmc5;
+package de.itsgraphax.rmc5.managers;
 
 import de.itsgraphax.grphxLib.utils.PdcDataBase;
+import de.itsgraphax.rmc5.HasPlugin;
 import de.itsgraphax.rmc5.token.TokenIdentifier;
 import io.papermc.paper.persistence.PersistentDataContainerView;
 import org.bukkit.NamespacedKey;
@@ -75,5 +76,26 @@ public class PdcData extends PdcDataBase implements HasPlugin {
     }
     public void setItemBroken(@NotNull ItemStack item, @Nullable Boolean val) {
         item.editPersistentDataContainer(pdc -> setBroken(pdc, ns.pdcItemTokenBroken(), val));
+    }
+
+    public @NotNull TokenIdentifier getItemToken(@NotNull ItemStack item) {
+        return getTokenId(item.getPersistentDataContainer(), ns.pdcItemTokenId());
+    }
+    public void setItemToken(@NotNull ItemStack item, @Nullable TokenIdentifier val) {
+        item.editPersistentDataContainer(pdc -> setTokenId(pdc, ns.pdcItemTokenId(), val));
+    }
+
+    public int getRareCrafts(@NotNull Player p) {
+        return pdc(p).getOrDefault(ns.pdcRareCrafts(), PersistentDataType.INTEGER, 0);
+    }
+    public void setRareCrafts(@NotNull Player p, int val) {
+        pdc(p).getOrDefault(ns.pdcRareCrafts(), PersistentDataType.INTEGER, val);
+    }
+
+    public int getSmelterOverheating(@NotNull Player p) {
+        return pdc(p).getOrDefault(ns.smelterOverheating(), PersistentDataType.INTEGER, 0);
+    }
+    public void setSmelterOverheating(@NotNull Player p, int val) {
+        pdc(p).set(ns.smelterOverheating(), PersistentDataType.INTEGER, val);
     }
 }

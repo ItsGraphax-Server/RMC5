@@ -1,7 +1,7 @@
 package de.itsgraphax.rmc5.token;
 
 import de.itsgraphax.rmc5.HasPlugin;
-import de.itsgraphax.rmc5.PdcData;
+import de.itsgraphax.rmc5.managers.PdcData;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -28,12 +28,15 @@ public class TokenManager implements HasPlugin {
     }
     public void reset(Player p) {
         for (TokenIdentifier id : idTokenMap.keySet()) {
-            plugin.pdcData().resetLastUse(p, id);
+            plugin.getPdcData().resetLastUse(p, id);
         }
     }
 
     public @NotNull Token tokenFromId(@NotNull TokenIdentifier id) {
         return idTokenMap.get(id);
+    }
+    public @NotNull Token tokenFromItem(@NotNull ItemStack item) {
+        return tokenFromId(plugin.getPdcData().getItemToken(item));
     }
     public @NotNull Collection<Token> allTokens() {
         return idTokenMap.values();
@@ -42,8 +45,8 @@ public class TokenManager implements HasPlugin {
     public void tick() {
         for (Player p : plugin.getServer().getOnlinePlayers()) { // iterate over players
             for (int slot = 0; slot < 2; slot++) { // iterate over slots
-                TokenIdentifier id = plugin.pdcData().getEquippedToken(p, slot);
-                boolean broken = plugin.pdcData().getEquippedBroken(p, slot);
+                TokenIdentifier id = plugin.getPdcData().getEquippedToken(p, slot);
+                boolean broken = plugin.getPdcData().getEquippedBroken(p, slot);
                 if (id == TokenIdentifier.UNKNOWN || broken) continue;
                 tokenFromId(id).onTick(p);
             }
@@ -53,8 +56,8 @@ public class TokenManager implements HasPlugin {
     }
 
     private void render(Player p) {
-        Token token0 = tokenFromId(plugin.pdcData().getEquippedToken(p, 0));
-        Token token1 = tokenFromId(plugin.pdcData().getEquippedToken(p, 1));
+        Token token0 = tokenFromId(plugin.getPdcData().getEquippedToken(p, 0));
+        Token token1 = tokenFromId(plugin.getPdcData().getEquippedToken(p, 1));
         p.sendActionBar(
                 plugin.richText().parse("{{COOLDOWN0}} <sprite:{{ICON0}}> <sprite:{{ICON1}}> {{COOLDOWN1}}",
                         "ICON0", token0.getSprite(p, 0),
@@ -65,7 +68,7 @@ public class TokenManager implements HasPlugin {
     }
 
     public UnequipResult unequipToken(@NotNull Player p, int slot) {
-        PdcData pdcData = plugin.pdcData();
+        PdcData pdcData = plugin.getPdcData();
 
         TokenIdentifier id = pdcData.getEquippedToken(p, slot);
         if (id == TokenIdentifier.UNKNOWN) return UnequipResult.NO_TOKEN;

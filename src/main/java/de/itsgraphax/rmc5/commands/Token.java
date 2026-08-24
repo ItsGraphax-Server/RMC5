@@ -23,8 +23,8 @@ public class Token implements HasPlugin {
     }
 
     void trigger(Player p, int slot) {
-        TokenIdentifier id = plugin.pdcData().getEquippedToken(p, slot);
-        boolean broken = plugin.pdcData().getEquippedBroken(p, slot);
+        TokenIdentifier id = plugin.getPdcData().getEquippedToken(p, slot);
+        boolean broken = plugin.getPdcData().getEquippedBroken(p, slot);
         if (id == TokenIdentifier.UNKNOWN) {
             p.sendMessage(plugin.richText().translatable("command.trigger.noToken"));
             return;
@@ -43,6 +43,6 @@ public class Token implements HasPlugin {
 
         token.onTrigger(p);
 
-        plugin.pdcData().setLastUse(p, id, LocalDateTime.now());
+        plugin.getPdcData().setLastUse(p, id, LocalDateTime.now());
     }
 }

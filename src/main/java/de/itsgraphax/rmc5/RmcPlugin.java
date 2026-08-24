@@ -7,10 +7,17 @@ import de.itsgraphax.grphxLib.utils.RichText;
 import de.itsgraphax.rmc5.commands.DebugBrigadier;
 import de.itsgraphax.rmc5.commands.TokenBrigadier;
 import de.itsgraphax.rmc5.commands.UnequipBrigadier;
-import de.itsgraphax.rmc5.customItems.NoxiumIngot;
-import de.itsgraphax.rmc5.customItems.AdvancementListener;
-import de.itsgraphax.rmc5.customItems.NoxiumNugget;
+import de.itsgraphax.rmc5.customItems.*;
+import de.itsgraphax.rmc5.customItems.listeners.AdvancementListener;
+import de.itsgraphax.rmc5.customItems.listeners.RecipeListener;
+import de.itsgraphax.rmc5.customItems.listeners.WanderingTraderListener;
 import de.itsgraphax.rmc5.customItems.recipes.RecipeManager;
+import de.itsgraphax.rmc5.managers.Namespaces;
+import de.itsgraphax.rmc5.managers.PdcData;
+import de.itsgraphax.rmc5.managers.RmcDataManager;
+import de.itsgraphax.rmc5.misc.DisableFireAspectListener;
+import de.itsgraphax.rmc5.misc.NoMaceEnchantListener;
+import de.itsgraphax.rmc5.misc.TraderSpawner;
 import de.itsgraphax.rmc5.token.TokenListener;
 import de.itsgraphax.rmc5.token.TokenManager;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
@@ -26,6 +33,7 @@ public final class RmcPlugin extends JavaPlugin {
 
     private final Namespaces namespaces = new Namespaces(this);
     private final PdcData pdcData;
+    private final RmcDataManager dataManager;
 
     private TokenManager tokenManager;
 
@@ -35,6 +43,7 @@ public final class RmcPlugin extends JavaPlugin {
         instance = this;
 
         pdcData = new PdcData();
+        dataManager = new RmcDataManager();
     }
 
     @Override
@@ -42,6 +51,9 @@ public final class RmcPlugin extends JavaPlugin {
         tokenManager = new TokenManager();
         citemManager.register(new NoxiumIngot());
         citemManager.register(new NoxiumNugget());
+        citemManager.register(new BlueMatter());
+        citemManager.register(new DarkMatter());
+        citemManager.register(new Repairer());
         RecipeManager.registerRecipe();
 
         saveDefaultConfig();
@@ -49,7 +61,11 @@ public final class RmcPlugin extends JavaPlugin {
         OnEnable.registerEvents(Set.of(
                 new CitemListener(citemManager),
                 new TokenListener(),
-                new AdvancementListener()
+                new AdvancementListener(),
+                new WanderingTraderListener(),
+                new RecipeListener(),
+                new DisableFireAspectListener(),
+                new NoMaceEnchantListener()
         ), this);
         OnEnable.registerEvents(tokenManager.allTokens(), this);
         OnEnable.registerCommands(Set.of(
@@ -58,7 +74,10 @@ public final class RmcPlugin extends JavaPlugin {
                 UnequipBrigadier::register
         ), this);
 
-        getServer().getScheduler().runTaskTimer(this, tokenManager::tick, 1, 1);
+        getServer().getScheduler().runTaskTimer(this, () -> {
+            tokenManager.tick();
+            TraderSpawner.tick();
+        }, 1, 1);
 
         logger().info(richText.parse("RmcPlugin successfully enabled"));
     }
@@ -75,9 +94,11 @@ public final class RmcPlugin extends JavaPlugin {
     public ComponentLogger logger() {
         return getComponentLogger();
     }
+
     public CitemManager citemManager() {
         return citemManager;
     }
+
     public RichText richText() {
         return richText;
     }
@@ -85,8 +106,13 @@ public final class RmcPlugin extends JavaPlugin {
     public Namespaces namespaces() {
         return namespaces;
     }
-    public PdcData pdcData() {
+
+    public PdcData getPdcData() {
         return pdcData;
+    }
+
+    public RmcDataManager getDataManager() {
+        return dataManager;
     }
 
     public TokenManager tokenManager() {

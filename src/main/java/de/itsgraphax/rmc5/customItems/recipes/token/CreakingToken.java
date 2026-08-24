@@ -1,7 +1,8 @@
-package de.itsgraphax.rmc5.customItems.recipes;
+package de.itsgraphax.rmc5.customItems.recipes.token;
 
 import de.itsgraphax.grphxLib.citems.Citem;
 import de.itsgraphax.grphxLib.citems.CrecipeOverride;
+import de.itsgraphax.rmc5.customItems.recipes.RecipeHelper;
 import de.itsgraphax.rmc5.token.TokenIdentifier;
 import org.bukkit.Material;
 import org.bukkit.inventory.ShapedRecipe;
@@ -14,14 +15,14 @@ public class CreakingToken implements RecipeHelper {
 
         ShapedRecipe recipe = new ShapedRecipe(ns.recipeCreakingToken(), token.createItem());
 
-        recipe.shape(" n ", "chd", " l ");
+        recipe.shape(" c ", "rnd", " s ");
         recipe.setIngredient('n', noxiumIngot.createItem().getType());
-        recipe.setIngredient('c', Material.RECOVERY_COMPASS);
-        recipe.setIngredient('h', Material.CREAKING_HEART);
+        recipe.setIngredient('c', Material.CALIBRATED_SCULK_SENSOR);
+        recipe.setIngredient('r', Material.RECOVERY_COMPASS);
         recipe.setIngredient('d', Material.MUSIC_DISC_5);
-        recipe.setIngredient('l', Material.PALE_OAK_LOG);
+        recipe.setIngredient('s', Material.SCULK_CATALYST);
 
-        ci.override(ns.recipeCreakingToken(), new CrecipeOverride(noxiumIngot, 2));
+        ci.override(ns.recipeCreakingToken(), new CrecipeOverride(noxiumIngot, 5));
 
         s.addRecipe(recipe);
     }

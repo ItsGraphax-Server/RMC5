@@ -1,5 +1,6 @@
 package de.itsgraphax.rmc5.token;
 
+import de.itsgraphax.rmc5.token.air.AirToken;
 import de.itsgraphax.rmc5.token.creaking.CreakingToken;
 import de.itsgraphax.rmc5.token.fire.FireToken;
 import de.itsgraphax.rmc5.token.smelter.SmelterToken;
@@ -14,7 +15,8 @@ public enum TokenIdentifier {
     UNKNOWN(UnknownToken::new),
     FIRE(FireToken::new),
     CREAKING(CreakingToken::new),
-    SMELTER(SmelterToken::new);
+    SMELTER(SmelterToken::new),
+    AIR(AirToken::new);
 
     private final Supplier<Token> factory;
 

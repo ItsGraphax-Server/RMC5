@@ -2,15 +2,18 @@ package de.itsgraphax.rmc5.token;
 
 import de.itsgraphax.grphxLib.citems.Citem;
 import de.itsgraphax.rmc5.HasPlugin;
-import de.itsgraphax.rmc5.PdcData;
+import de.itsgraphax.rmc5.managers.PdcData;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
+import org.bukkit.EntityEffect;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,7 +45,7 @@ public abstract class Token extends Citem implements HasPlugin, Listener {
         //plugin.logger().info(String.valueOf(item.getPersistentDataContainer().get(plugin.namespaces().pdcItemTokenBroken(), PersistentDataType.BOOLEAN)));
         Player p = event.getPlayer();
 
-        PdcData pdcData = plugin.pdcData();
+        PdcData pdcData = plugin.getPdcData();
 
         boolean broken = pdcData.getItemBroken(item);
 
@@ -58,42 +61,46 @@ public abstract class Token extends Citem implements HasPlugin, Listener {
 
         if (!broken) onEquip(p);
 
+        p.playEffect(EntityEffect.PROTECTED_FROM_DEATH);
+
         consume(event);
     }
 
     public boolean hasWorkingToken(Player p) {
         for (int slot = 0; slot < 2; slot++) { // iterate over all slots
             if (
-                    plugin.pdcData().getEquippedToken(p, slot) == id &&
-                            !plugin.pdcData().getEquippedBroken(p, slot)
+                    plugin.getPdcData().getEquippedToken(p, slot) == id &&
+                            !plugin.getPdcData().getEquippedBroken(p, slot)
             ) return true;
         }
         return false;
     }
 
+    @EventHandler
+    private void onJoinListen(PlayerJoinEvent e) {
+        Player p = e.getPlayer();
+        if (hasWorkingToken(p)) onJoin(p);
+    }
+
     public void onEquip(Player p) {
     }
-
     public void onUnequip(Player p) {
     }
-
     public void onTick(Player p) {
     }
-
     public void onTrigger(Player p) {
     }
+    public void onJoin(Player p) {}
 
     public int getBaseCooldown() {
         return config.getInt("cooldown");
     }
-
     public long secondsSinceLastUse(Player p) {
-        LocalDateTime lastUse = plugin.pdcData().getLastUse(p, id);
+        LocalDateTime lastUse = plugin.getPdcData().getLastUse(p, id);
         int baseCooldown = getBaseCooldown();
 
         return Duration.between(lastUse, LocalDateTime.now()).toSeconds();
     }
-
     public boolean onCooldown(Player p) {
         return secondsSinceLastUse(p) < getBaseCooldown();
     }
@@ -108,25 +115,26 @@ public abstract class Token extends Citem implements HasPlugin, Listener {
 
         return "■".repeat(filled) + "□".repeat(5 - filled);
     }
-
     protected int getSlot() {
         return switch (rarity) {
             case RARE, EPIC -> 0;
             case LEGENDARY, MYTHIC -> 1;
         };
     }
-
     public String getSprite(Player p, int slot) {
-        String broken = plugin.pdcData().getEquippedBroken(p, slot) ? "_broken" : "";
+        String broken = plugin.getPdcData().getEquippedBroken(p, slot) ? "_broken" : "";
         return String.format("items:rmc5/token%s/%s", broken, id.id().toLowerCase());
     }
 
-    public TokenIdentifier id() {
+    public TokenIdentifier getId() {
         return id;
     }
-
-    public TokenRarity rarity() {
+    public TokenRarity getRarity() {
         return rarity;
+    }
+
+    public ConfigurationSection getConfig() {
+        return config;
     }
 
     @Override
@@ -136,7 +144,8 @@ public abstract class Token extends Citem implements HasPlugin, Listener {
 
     public @NotNull ItemStack createItem(boolean broken) {
         ItemStack ret = super.createItem();
-        plugin.pdcData().setItemBroken(ret, broken);
+        plugin.getPdcData().setItemBroken(ret, broken);
+        plugin.getPdcData().setItemToken(ret, id);
 
         NamespacedKey newKey = new NamespacedKey(key.namespace(), key.getKey() + (broken ? "_broken" : ""));
 

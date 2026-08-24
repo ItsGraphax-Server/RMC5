@@ -1,4 +1,4 @@
-package de.itsgraphax.rmc5.customItems;
+package de.itsgraphax.rmc5.customItems.listeners;
 
 import de.itsgraphax.rmc5.HasPlugin;
 import io.papermc.paper.advancement.AdvancementDisplay;

@@ -1,7 +1,8 @@
-package de.itsgraphax.rmc5.customItems.recipes;
+package de.itsgraphax.rmc5.customItems.recipes.citem;
 
 import de.itsgraphax.grphxLib.citems.Citem;
 import de.itsgraphax.grphxLib.citems.CrecipeOverride;
+import de.itsgraphax.rmc5.customItems.recipes.RecipeHelper;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 
