@@ -9,8 +9,8 @@ tokens:
     # Active
     strength: 2.65
     speed: 2.0
-  CREAKING:
-    cooldown: 270
+  WARDEN:
+    cooldown: 240
     maxCrafts: 3
 
     # Passive
@@ -47,14 +47,81 @@ tokens:
       - "NETHERITE_AXE"
 
     # Active
-    duration: 30
+    duration: 20
   AIR:
-    cooldown: 1
+    cooldown: 15
 
     # Active
     multiplier: 1
     lift: 0.5
+  CRAB:
+    cooldown: 1
+    maxCrafts: 3
+
+    # Passive
+    rangeMultiplier: 0.7
+    appliesTo:
+      - "SHEARS"
+
+      - "WOODEN_PICKAXE"
+      - "COPPER_PICKAXE"
+      - "IRON_PICKAXE"
+      - "GOLD_PICKAXE"
+      - "DIAMOND_PICKAXE"
+      - "NETHERITE_PICKAXE"
+
+      - "WOODEN_HOE"
+      - "COPPER_HOE"
+      - "IRON_HOE"
+      - "GOLD_HOE"
+      - "DIAMOND_HOE"
+      - "NETHERITE_HOE"
+
+      - "WOODEN_SWORD"
+      - "COPPER_SWORD"
+      - "IRON_SWORD"
+      - "GOLD_SWORD"
+      - "DIAMOND_SWORD"
+      - "NETHERITE_SWORD"
+
+      - "WOODEN_SHOVEL"
+      - "COPPER_SHOVEL"
+      - "IRON_SHOVEL"
+      - "GOLD_SHOVEL"
+      - "DIAMOND_SHOVEL"
+      - "NETHERITE_SHOVEL"
+
+      - "WOODEN_AXE"
+      - "COPPER_AXE"
+      - "IRON_AXE"
+      - "GOLD_AXE"
+      - "DIAMOND_AXE"
+      - "NETHERITE_AXE"
+  POTION:
+    cooldown: 300
+
+    # Active
+    multiplier: 1.5
+  VILLAGER:
+    cooldown: 1
+
+    # Passive
+  HEART:
+    cooldown: 240
+
+    # Passive
+    heartMod: 10
+
+    # Active
+    resistanceTime: 30
+    resistanceAmplifier: 2
 
 trader:
-  min: 0
-  max: 1
+  min: 60
+  max: 240
+  kill: 15
+
+titles:
+  traderSpawned: "<light_blue>A Wandering Trader has appeared!"
+subtitles:
+  traderSpawned: "Find him at /spawn"

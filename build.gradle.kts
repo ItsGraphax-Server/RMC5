@@ -7,17 +7,26 @@ plugins {
 repositories {
     mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/")
+
     maven("https://eldonexus.de/repository/maven-public")
+
+    maven("https://repo.codemc.io/repository/maven-releases/")
+    maven("https://repo.codemc.io/repository/maven-snapshots/")
+
     maven("https://jitpack.io")
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:26.2.build.+")
 
+    compileOnly("com.github.retrooper:packetevents-spigot:2.13.0")
+
     compileOnly("net.strokkur.commands:annotations-paper:2.1.4")
     annotationProcessor("net.strokkur.commands:processor-paper:2.1.4")
 
-    implementation("de.itsgraphax:GrphxLib:2.1.1")
+    implementation("de.itsgraphax:GrphxLib:3.2.0")
+
+    compileOnly("com.github.ItsGraphax-Server:FusionCore:d5e09196c6")
 }
 
 java {

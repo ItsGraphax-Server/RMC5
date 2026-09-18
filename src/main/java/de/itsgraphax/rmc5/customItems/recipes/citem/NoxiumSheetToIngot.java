@@ -1,12 +1,12 @@
 package de.itsgraphax.rmc5.customItems.recipes.citem;
 
 import de.itsgraphax.grphxLib.citems.Citem;
-import de.itsgraphax.grphxLib.citems.CrecipeOverride;
+import de.itsgraphax.grphxLib.citems.RequireCitemOverride;
 import de.itsgraphax.rmc5.customItems.recipes.RecipeHelper;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 
-public class NoxiumNuggetToIngot implements RecipeHelper {
+public class NoxiumSheetToIngot implements RecipeHelper {
     public static void register() {
         Citem ingot = ci.get(ns.itemNoxiumIngot());
         Citem nugget = ci.get(ns.itemNoxiumNugget());
@@ -19,7 +19,7 @@ public class NoxiumNuggetToIngot implements RecipeHelper {
         recipe.shape("nnn", "nnn", "nnn");
         recipe.setIngredient('n', nugget.createItem().getType());
 
-        ci.override(ns.recipeNoxiomNuggetToIngot(), new CrecipeOverride(nugget, 5));
+        ci.override(ns.recipeNoxiomNuggetToIngot(), new RequireCitemOverride(nugget, 5));
 
         s.addRecipe(recipe);
     }

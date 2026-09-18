@@ -2,6 +2,7 @@ package de.itsgraphax.rmc5.token;
 
 import de.itsgraphax.rmc5.HasPlugin;
 import de.itsgraphax.rmc5.managers.PdcData;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -26,6 +27,7 @@ public class TokenManager implements HasPlugin {
             token.reloadConfig();
         }
     }
+
     public void reset(Player p) {
         for (TokenIdentifier id : idTokenMap.keySet()) {
             plugin.getPdcData().resetLastUse(p, id);
@@ -35,9 +37,11 @@ public class TokenManager implements HasPlugin {
     public @NotNull Token tokenFromId(@NotNull TokenIdentifier id) {
         return idTokenMap.get(id);
     }
+
     public @NotNull Token tokenFromItem(@NotNull ItemStack item) {
         return tokenFromId(plugin.getPdcData().getItemToken(item));
     }
+
     public @NotNull Collection<Token> allTokens() {
         return idTokenMap.values();
     }
@@ -50,21 +54,18 @@ public class TokenManager implements HasPlugin {
                 if (id == TokenIdentifier.UNKNOWN || broken) continue;
                 tokenFromId(id).onTick(p);
             }
-
-            render(p);
         }
     }
 
-    private void render(Player p) {
+    public Component renderTokenUi(Player p) {
         Token token0 = tokenFromId(plugin.getPdcData().getEquippedToken(p, 0));
         Token token1 = tokenFromId(plugin.getPdcData().getEquippedToken(p, 1));
-        p.sendActionBar(
+        return
                 plugin.richText().parse("{{COOLDOWN0}} <sprite:{{ICON0}}> <sprite:{{ICON1}}> {{COOLDOWN1}}",
                         "ICON0", token0.getSprite(p, 0),
                         "ICON1", token1.getSprite(p, 1),
                         "COOLDOWN0", token0.getCooldownString(p),
-                        "COOLDOWN1", token1.getCooldownString(p))
-        );
+                        "COOLDOWN1", token1.getCooldownString(p));
     }
 
     public UnequipResult unequipToken(@NotNull Player p, int slot) {
@@ -85,6 +86,7 @@ public class TokenManager implements HasPlugin {
 
         return UnequipResult.UNEQUIPPED;
     }
+
     public enum UnequipResult {
         UNEQUIPPED,
         NO_TOKEN

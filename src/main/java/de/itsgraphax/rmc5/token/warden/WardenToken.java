@@ -1,4 +1,4 @@
-package de.itsgraphax.rmc5.token.creaking;
+package de.itsgraphax.rmc5.token.warden;
 
 import de.itsgraphax.rmc5.token.Token;
 import de.itsgraphax.rmc5.token.TokenIdentifier;
@@ -9,8 +9,10 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityPortalEnterEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -20,12 +22,12 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.HashSet;
 import java.util.Set;
 
-public class CreakingToken extends Token {
+public class WardenToken extends Token {
     private final ArenaWorldManager worldManager = new ArenaWorldManager();
     private final Set<Location> placedBlocks = new HashSet<>();
 
-    public CreakingToken() {
-        super(TokenIdentifier.CREAKING, TokenRarity.EPIC);
+    public WardenToken() {
+        super(TokenIdentifier.WARDEN, TokenRarity.EPIC);
     }
 
     @EventHandler
@@ -58,6 +60,8 @@ public class CreakingToken extends Token {
 
         worldManager.getSpawn().getWorld().playSound(worldManager.getSpawn(),
                 Sound.ENTITY_CREAKING_UNFREEZE, 2, 1);
+
+        plugin.getServer().sendMessage(plugin.richText().parse("<black><italic><bold>DOMAIN EXPANSION ABYSSAL VOID"));
     }
 
     @EventHandler
@@ -99,5 +103,15 @@ public class CreakingToken extends Token {
         if (placedBlocks.remove(loc)) return;
 
         e.setCancelled(true);
+    }
+
+    @EventHandler
+    void onEntityExplode(EntityExplodeEvent e) {
+        if (worldManager.isInWorld(e.getLocation())) e.setCancelled(true);
+    }
+
+    @EventHandler
+    void onBlockExplode(BlockExplodeEvent e) {
+        if (worldManager.isInWorld(e.getBlock().getLocation())) e.setCancelled(true);
     }
 }

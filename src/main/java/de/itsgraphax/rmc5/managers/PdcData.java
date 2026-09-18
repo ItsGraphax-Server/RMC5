@@ -71,6 +71,13 @@ public class PdcData extends PdcDataBase implements HasPlugin {
         pdc(p).remove(ns.pdcLastTokenUse(id));
     }
 
+    public int getBountyWallet(@NotNull Player p) {
+        return pdc(p).getOrDefault(ns.pdcBountyWallet(), PersistentDataType.INTEGER, 0);
+    }
+    public void setBountyWallet(@NotNull Player p, int val) {
+        pdc(p).set(ns.pdcBountyWallet(), PersistentDataType.INTEGER, val);
+    }
+
     public boolean getItemBroken(@NotNull ItemStack item) {
         return getBroken(item.getPersistentDataContainer(), ns.pdcItemTokenBroken());
     }

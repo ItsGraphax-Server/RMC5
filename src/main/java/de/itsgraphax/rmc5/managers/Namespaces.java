@@ -25,6 +25,9 @@ public class Namespaces extends NamespacesBase {
     public NamespacedKey itemDarkMatter() {
         return key("dark_matter");
     }
+    public NamespacedKey itemGoldenMatter() {
+        return key("golden_matter");
+    }
     public NamespacedKey itemRepairer() {
         return key("repairer");
     }
@@ -39,18 +42,34 @@ public class Namespaces extends NamespacesBase {
     public NamespacedKey recipeRepairer() {
         return key("repairer");
     }
+    public NamespacedKey recipeDarkRepairer() {
+        return key("darkRepairer");
+    }
     public NamespacedKey recipeRepair() {
         return key("repair");
     }
 
-    public NamespacedKey recipeCreakingToken() {
-        return key("creaking_token");
+    public NamespacedKey recipeGoldenMatter() {
+        return key("golden_matter");
+    }
+
+    public NamespacedKey recipeWardenToken() {
+        return key("warden_token");
     }
     public NamespacedKey recipeSmelterToken() {
         return key("smelter_token");
     }
     public NamespacedKey recipeAirToken() {
         return key("air_token");
+    }
+    public NamespacedKey recipeFireToken() {
+        return key("fire_token");
+    }
+    public NamespacedKey recipeCrabToken() {
+        return key("crab_token");
+    }
+    public NamespacedKey recipePotionToken() {
+        return key("potion_token");
     }
 
 
@@ -65,6 +84,10 @@ public class Namespaces extends NamespacesBase {
         return key("token.cooldown." + id.id());
     }
 
+    public NamespacedKey pdcBountyWallet() {
+        return key("bountyWallet");
+    }
+
     public NamespacedKey pdcItemTokenBroken() {
         return key("token.broken");
     }
@@ -76,11 +99,26 @@ public class Namespaces extends NamespacesBase {
         return key("rareCrafts");
     }
 
+    public NamespacedKey fontHudOffset20() {
+        return key("hud/offset-20");
+    }
+    public NamespacedKey fontIconOffset20() {
+        return key("hud/offset-20");
+    }
+
     public NamespacedKey smelterOverheating() {
         return key("smelter_overheating");
     }
 
     public NamespacedKey airModifier() {
         return key("air_modifier");
+    }
+
+    public NamespacedKey crabModifier() {
+        return key("crab_modifier");
+    }
+
+    public NamespacedKey heartModifier() {
+        return key("heart_modifier");
     }
 }

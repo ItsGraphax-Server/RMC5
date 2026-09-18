@@ -6,5 +6,14 @@ bootstrapper: de.itsgraphax.rmc5.RmcPluginBootstrap
 api-version: '26.1.2'
 load: POSTWORLD
 
+dependencies:
+  server:
+    packetevents:
+      load: BEFORE
+      required: true
+    FusionEngine:
+      load: BEFORE
+      required: true
+
 authors: [ ItsGraphax ]
 website: https://itsgraphax.de

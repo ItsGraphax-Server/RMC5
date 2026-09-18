@@ -1,6 +1,8 @@
 package de.itsgraphax.rmc5.misc;
 
 import de.itsgraphax.rmc5.HasPlugin;
+import net.kyori.adventure.audience.Audience;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.World;
@@ -28,5 +30,7 @@ public class Utils implements HasPlugin {
         }
     }
 
-
+    public static Audience getOnlineAudience() {
+        return Audience.audience(Bukkit.getOnlinePlayers());
+    }
 }

@@ -1,12 +1,12 @@
 package de.itsgraphax.rmc5.customItems.recipes.citem;
 
 import de.itsgraphax.grphxLib.citems.Citem;
-import de.itsgraphax.grphxLib.citems.CrecipeOverride;
+import de.itsgraphax.grphxLib.citems.RequireCitemOverride;
 import de.itsgraphax.rmc5.customItems.recipes.RecipeHelper;
 import org.bukkit.Material;
 import org.bukkit.inventory.ShapedRecipe;
 
-public class Repairer implements RecipeHelper {
+public class RepairerRecipe implements RecipeHelper {
     public static void register() {
         Citem repairer = ci.get(ns.itemRepairer());
         Citem blueMatter = ci.get(ns.itemBlueMatter());
@@ -20,7 +20,7 @@ public class Repairer implements RecipeHelper {
         recipe.setIngredient('d', Material.DIAMOND_BLOCK);
         recipe.setIngredient('s', Material.STICK);
 
-        ci.override(ns.recipeRepairer(), new CrecipeOverride(blueMatter, 3));
+        ci.override(ns.recipeRepairer(), new RequireCitemOverride(blueMatter, 3));
 
         s.addRecipe(recipe);
     }

@@ -15,6 +15,8 @@ import de.itsgraphax.rmc5.customItems.recipes.RecipeManager;
 import de.itsgraphax.rmc5.managers.Namespaces;
 import de.itsgraphax.rmc5.managers.PdcData;
 import de.itsgraphax.rmc5.managers.RmcDataManager;
+import de.itsgraphax.rmc5.managers.UIManager;
+import de.itsgraphax.rmc5.misc.Cure4AllListener;
 import de.itsgraphax.rmc5.misc.DisableFireAspectListener;
 import de.itsgraphax.rmc5.misc.NoMaceEnchantListener;
 import de.itsgraphax.rmc5.misc.TraderSpawner;
@@ -35,6 +37,7 @@ public final class RmcPlugin extends JavaPlugin {
     private final PdcData pdcData;
     private final RmcDataManager dataManager;
 
+    private final UIManager uiManager;
     private TokenManager tokenManager;
 
     public RmcPlugin() {
@@ -44,6 +47,7 @@ public final class RmcPlugin extends JavaPlugin {
 
         pdcData = new PdcData();
         dataManager = new RmcDataManager();
+        uiManager = new UIManager();
     }
 
     @Override
@@ -53,6 +57,7 @@ public final class RmcPlugin extends JavaPlugin {
         citemManager.register(new NoxiumNugget());
         citemManager.register(new BlueMatter());
         citemManager.register(new DarkMatter());
+        citemManager.register(new GoldenMatter());
         citemManager.register(new Repairer());
         RecipeManager.registerRecipe();
 
@@ -65,7 +70,8 @@ public final class RmcPlugin extends JavaPlugin {
                 new WanderingTraderListener(),
                 new RecipeListener(),
                 new DisableFireAspectListener(),
-                new NoMaceEnchantListener()
+                new NoMaceEnchantListener(),
+                new Cure4AllListener()
         ), this);
         OnEnable.registerEvents(tokenManager.allTokens(), this);
         OnEnable.registerCommands(Set.of(
@@ -77,6 +83,7 @@ public final class RmcPlugin extends JavaPlugin {
         getServer().getScheduler().runTaskTimer(this, () -> {
             tokenManager.tick();
             TraderSpawner.tick();
+            uiManager.render();
         }, 1, 1);
 
         logger().info(richText.parse("RmcPlugin successfully enabled"));

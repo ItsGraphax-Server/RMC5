@@ -2,6 +2,7 @@ package de.itsgraphax.rmc5.managers;
 
 import de.itsgraphax.grphxLib.utils.DataManager;
 import de.itsgraphax.rmc5.RmcPlugin;
+import de.itsgraphax.rmc5.events.EventIdentifier;
 import de.itsgraphax.rmc5.token.TokenIdentifier;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,6 +16,7 @@ public class RmcDataManager extends DataManager {
     }
     public void setCrafts(TokenIdentifier id, int amount) {
         data.set(String.format("crafts.%s", id.id()), amount);
+        save();
     }
 
     public @Nullable Long getNextTrader() {
@@ -22,5 +24,13 @@ public class RmcDataManager extends DataManager {
     }
     public void setNextTrader(long val) {
         data.set("nextTrader", val);
+        save();
+    }
+
+    public EventIdentifier getCurrentEvent() {
+        return EventIdentifier.valueOf(data.getString("currentEvent", "NONE"));
+    }
+    public void setCurrentEvent(EventIdentifier id) {
+        data.set("currentEvent", id.toString());
     }
 }

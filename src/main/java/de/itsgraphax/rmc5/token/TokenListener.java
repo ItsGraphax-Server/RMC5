@@ -1,6 +1,7 @@
 package de.itsgraphax.rmc5.token;
 
 import de.itsgraphax.rmc5.HasPlugin;
+import de.itsgraphax.rmc5.managers.PdcData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -10,9 +11,14 @@ import org.bukkit.event.inventory.CraftItemEvent;
 public class TokenListener implements HasPlugin, Listener {
     @EventHandler
     void onDeath(PlayerDeathEvent e) {
+        PdcData pdcData = plugin.getPdcData();
+        Player p = e.getPlayer();
         for (int slot = 0; slot < 2; slot++) { // loop over slots
-            if (plugin.getPdcData().getEquippedToken(e.getPlayer(), slot) != TokenIdentifier.UNKNOWN) {
-                plugin.getPdcData().setEquippedBroken(e.getPlayer(), slot, true);
+            Token token = plugin.tokenManager().tokenFromId(pdcData.getEquippedToken(p, slot));
+            if (token.getId() != TokenIdentifier.UNKNOWN &&
+            !pdcData.getEquippedBroken(p, slot)) {
+                pdcData.setEquippedBroken(e.getPlayer(), slot, true);
+                token.onUnequip(p);
             }
         }
     }
@@ -25,11 +31,12 @@ public class TokenListener implements HasPlugin, Listener {
 
         int tokenCrafts = plugin.getDataManager().getCrafts(token.getId());
         int playerCrafts = plugin.getPdcData().getRareCrafts(p);
-        if (tokenCrafts <= token.getConfig().getInt("maxCrafts", 1) ||
-                playerCrafts >= plugin.getConfig().getInt("maxRareCrafts", 3)) {
-            //p.sendMessage(plugin.richText().translatable("error.maxCrafts"));
-            //e.setCancelled(true);
-            //return;
+
+        if (tokenCrafts >= token.getConfig().getInt("maxCrafts", 3) ||
+                playerCrafts >= plugin.getConfig().getInt("maxRareCrafts", 1)) {
+            p.sendMessage(plugin.richText().translatable("error.maxCrafts"));
+            e.setCancelled(true);
+            return;
         }
 
 

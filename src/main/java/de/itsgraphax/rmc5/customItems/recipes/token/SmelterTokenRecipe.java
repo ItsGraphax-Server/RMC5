@@ -1,13 +1,13 @@
 package de.itsgraphax.rmc5.customItems.recipes.token;
 
 import de.itsgraphax.grphxLib.citems.Citem;
-import de.itsgraphax.grphxLib.citems.CrecipeOverride;
+import de.itsgraphax.grphxLib.citems.RequireCitemOverride;
 import de.itsgraphax.rmc5.customItems.recipes.RecipeHelper;
 import de.itsgraphax.rmc5.token.TokenIdentifier;
 import org.bukkit.Material;
 import org.bukkit.inventory.ShapedRecipe;
 
-public class SmelterToken implements RecipeHelper {
+public class SmelterTokenRecipe implements RecipeHelper {
     public static void register() {
         Citem token = plugin.tokenManager().tokenFromId(TokenIdentifier.SMELTER);
         Citem noxiumIngot = ci.get(ns.itemNoxiumIngot());
@@ -22,7 +22,7 @@ public class SmelterToken implements RecipeHelper {
         recipe.setIngredient('e', Material.EMERALD_BLOCK);
         recipe.setIngredient('d', Material.DIAMOND_BLOCK);
 
-        ci.override(ns.recipeSmelterToken(), new CrecipeOverride(noxiumIngot, 5));
+        ci.override(ns.recipeSmelterToken(), new RequireCitemOverride(noxiumIngot, 5));
 
         s.addRecipe(recipe);
     }

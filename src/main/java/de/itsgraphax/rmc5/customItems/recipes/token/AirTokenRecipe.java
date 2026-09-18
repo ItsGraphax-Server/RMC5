@@ -1,13 +1,13 @@
 package de.itsgraphax.rmc5.customItems.recipes.token;
 
 import de.itsgraphax.grphxLib.citems.Citem;
-import de.itsgraphax.grphxLib.citems.CrecipeOverride;
+import de.itsgraphax.grphxLib.citems.RequireCitemOverride;
 import de.itsgraphax.rmc5.customItems.recipes.RecipeHelper;
 import de.itsgraphax.rmc5.token.TokenIdentifier;
 import org.bukkit.Material;
 import org.bukkit.inventory.ShapedRecipe;
 
-public class AirToken implements RecipeHelper {
+public class AirTokenRecipe implements RecipeHelper {
     public static void register() {
         Citem token = plugin.tokenManager().tokenFromId(TokenIdentifier.AIR);
         Citem noxiumIngot = ci.get(ns.itemNoxiumIngot());
@@ -22,7 +22,7 @@ public class AirToken implements RecipeHelper {
         recipe.setIngredient('b', Material.BREEZE_ROD);
         recipe.setIngredient('k', Material.OMINOUS_TRIAL_KEY);
 
-        ci.override(ns.recipeAirToken(), new CrecipeOverride(noxiumIngot, 8));
+        ci.override(ns.recipeAirToken(), new RequireCitemOverride(noxiumIngot, 8));
 
         s.addRecipe(recipe);
     }
