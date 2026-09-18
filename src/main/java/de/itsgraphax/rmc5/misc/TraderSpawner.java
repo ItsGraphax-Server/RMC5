@@ -6,7 +6,6 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.sound.Sound;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.WanderingTrader;
@@ -31,6 +30,7 @@ public class TraderSpawner implements HasPlugin {
     public static void tick() {
         spawnTraderTick();
         glowingTraderTick();
+        killTraders();
     }
 
     private static void glowingTraderTick() {
@@ -50,8 +50,7 @@ public class TraderSpawner implements HasPlugin {
 
         if (System.currentTimeMillis() < nextSpawn) return;
 
-        Location spawn = plugin.getServer().getRespawnWorld().getSpawnLocation();
-        WanderingTrader e = spawn.getWorld().spawn(spawn, WanderingTrader.class);
+        plugin.getServer().getRespawnWorld().getSpawnLocation();
 
         Audience audience = Audience.audience(Bukkit.getOnlinePlayers());
         audience.showTitle(Title.title(
@@ -61,5 +60,13 @@ public class TraderSpawner implements HasPlugin {
         audience.playSound(Sound.sound(Key.key("totem_of_undying"), Sound.Source.MASTER, 1f, 1f), Sound.Emitter.self());
 
         setNextSpawn();
+    }
+
+    private static void killTraders() {
+        for (Entity e : plugin.getServer().getRespawnWorld().getEntities()) {
+            if (!(e instanceof WanderingTrader trader)) continue;
+
+            if (trader.getRecipe(0).getUses() > 0) e.remove();
+        }
     }
 }

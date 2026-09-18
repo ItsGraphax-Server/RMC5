@@ -3,12 +3,12 @@ package de.itsgraphax.rmc5.token.smelter;
 import de.itsgraphax.rmc5.token.Token;
 import de.itsgraphax.rmc5.token.TokenIdentifier;
 import de.itsgraphax.rmc5.token.TokenRarity;
+import io.papermc.paper.block.TileStateInventoryHolder;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
-import org.bukkit.block.Container;
 import org.bukkit.block.Furnace;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
@@ -56,6 +56,7 @@ public class SmelterToken extends Token {
     }
 
     private void drop(ItemStack item, Location loc) {
+        if (item == null) return;
         Location clone = loc.clone();
         loc.getWorld().dropItemNaturally(clone.add(0.5, 0.5, 0.5), item);
     }
@@ -77,7 +78,7 @@ public class SmelterToken extends Token {
         Block block = e.getBlock();
         Location blockLoc = block.getLocation();
 
-        if (block.getState() instanceof Container && block.getType() != Material.FURNACE) return;
+        if (block.getState() instanceof TileStateInventoryHolder && block.getType() != Material.FURNACE) return;
 
         e.setDropItems(false);
 
@@ -87,8 +88,6 @@ public class SmelterToken extends Token {
         }
 
         if (block.getType() != Material.FURNACE) {
-
-
             for (ItemStack item : block.getDrops(p.getInventory().getItemInMainHand(), p)) {
                 ItemStack result = getFirstApplicableRecipeResult(item);
                 if (result == null) drop(item, blockLoc);
@@ -104,7 +103,7 @@ public class SmelterToken extends Token {
             drop(inv.getFuel(), blockLoc);
             drop(inv.getResult(), blockLoc);
 
-            ItemStack result = getFirstApplicableRecipeResult(inv.getSmelting());
+            ItemStack result = getFirstApplicableRecipeResult(inv.getItem(0));
             if (result != null) {
                 drop(result, blockLoc);
                 particles(blockLoc);
@@ -117,9 +116,8 @@ public class SmelterToken extends Token {
         LivingEntity entity = e.getEntity();
         if (entity.getType() == EntityType.PLAYER) return;
         if (!(e.getDamageSource().getCausingEntity() instanceof Player p)) return;
-        plugin.logger().info("1");
+
         if (!hasWorkingToken(p) || !shouldTrigger(p)) return;
-        plugin.logger().info("2");
 
         List<ItemStack> drops = e.getDrops();
         for (int i = 0; i < drops.size(); i++) {
@@ -132,6 +130,7 @@ public class SmelterToken extends Token {
         }
     }
 
+
     @Override
     public void onJoin(Player p) {
         if (plugin.getPdcData().getSmelterOverheating(p) > 0) {
@@ -142,7 +141,7 @@ public class SmelterToken extends Token {
 
     @Override
     public void onTick(Player p) {
-        if (plugin.getPdcData().getSmelterOverheating(p) > 0) p.setFoodLevel(17);
+        if (plugin.getPdcData().getSmelterOverheating(p) > 0) p.setFoodLevel(6);
     }
 
     @Override
@@ -161,5 +160,13 @@ public class SmelterToken extends Token {
                 1, 1
         );
         particles(p.getLocation());
+    }
+
+    @Override
+    public void onUnequip(Player p) {
+        if (plugin.getPdcData().getSmelterOverheating(p) > 0) {
+            p.removePotionEffect(PotionEffectType.STRENGTH);
+            plugin.getPdcData().setSmelterOverheating(p, 0);
+        }
     }
 }

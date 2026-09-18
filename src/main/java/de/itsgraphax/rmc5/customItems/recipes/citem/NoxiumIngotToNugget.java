@@ -1,7 +1,7 @@
 package de.itsgraphax.rmc5.customItems.recipes.citem;
 
 import de.itsgraphax.grphxLib.citems.Citem;
-import de.itsgraphax.grphxLib.citems.CrecipeOverride;
+import de.itsgraphax.grphxLib.citems.RequireCitemOverride;
 import de.itsgraphax.rmc5.customItems.recipes.RecipeHelper;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
@@ -19,7 +19,7 @@ public class NoxiumIngotToNugget implements RecipeHelper {
         recipe.shape("   ", " i ", "   ");
         recipe.setIngredient('i', ingot.createItem().getType());
 
-        ci.override(ns.recipeNoxiomIngotToNugget(), new CrecipeOverride(ingot, 5));
+        ci.override(ns.recipeNoxiomIngotToNugget(), new RequireCitemOverride(ingot, 5));
 
         s.addRecipe(recipe);
     }

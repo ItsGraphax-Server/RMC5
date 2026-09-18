@@ -16,7 +16,11 @@ public class FireToken extends Token {
 
     @Override
     public void onTick(Player p) {
-        p.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 20, 0));
+        p.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 10, 0));
+
+        if (p.getVisualFire().toBooleanOrElse(false)) {
+            p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 10, 1));
+        }
     }
 
     @Override
@@ -30,5 +34,7 @@ public class FireToken extends Token {
 
         fireball.setAcceleration(direction.multiply(speed));
         fireball.setYield((float) strength);
+
+        plugin.getServer().sendMessage(plugin.richText().parse("<red><italic><bold>FIREBALL"));
     }
 }

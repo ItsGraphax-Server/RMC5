@@ -1,4 +1,4 @@
-package de.itsgraphax.rmc5.token.creaking;
+package de.itsgraphax.rmc5.token.warden;
 
 import org.bukkit.generator.ChunkGenerator;
 

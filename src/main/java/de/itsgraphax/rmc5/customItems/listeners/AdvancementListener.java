@@ -13,7 +13,7 @@ public class AdvancementListener implements Listener, HasPlugin {
         if (display == null) return;
 
         if (display.frame() != AdvancementDisplay.Frame.CHALLENGE) return;
-
+        
         e.getPlayer().give(plugin.citemManager()
                 .get(plugin.namespaces().itemNoxiumIngot())
                 .createItem()

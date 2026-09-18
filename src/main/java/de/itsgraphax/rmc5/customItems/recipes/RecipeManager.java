@@ -1,22 +1,21 @@
 package de.itsgraphax.rmc5.customItems.recipes;
 
-import de.itsgraphax.rmc5.customItems.recipes.citem.NoxiumIngotToNugget;
-import de.itsgraphax.rmc5.customItems.recipes.citem.NoxiumNuggetToIngot;
-import de.itsgraphax.rmc5.customItems.recipes.citem.Repair;
-import de.itsgraphax.rmc5.customItems.recipes.citem.Repairer;
-import de.itsgraphax.rmc5.customItems.recipes.token.AirToken;
-import de.itsgraphax.rmc5.customItems.recipes.token.CreakingToken;
-import de.itsgraphax.rmc5.customItems.recipes.token.SmelterToken;
+import de.itsgraphax.rmc5.customItems.recipes.citem.*;
+import de.itsgraphax.rmc5.customItems.recipes.token.*;
 
 public class RecipeManager {
     public static void registerRecipe() {
         NoxiumIngotToNugget.register();
-        NoxiumNuggetToIngot.register();
-        Repairer.register();
-        Repair.register();
+        NoxiumSheetToIngot.register();
+        RepairerRecipe.register();
+        DarkRepairerRecipe.register();
+        RepairRecipe.register();
+        GoldenMatterRecipe.register();
 
-        CreakingToken.register();
-        SmelterToken.register();
-        AirToken.register();
+        WardenTokenRecipe.register();
+        SmelterTokenRecipe.register();
+        AirTokenRecipe.register();
+        FireTokenRecipe.register();
+        CrabTokenRecipe.register();
     }
 }
