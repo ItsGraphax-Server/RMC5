@@ -21,12 +21,12 @@ public class Unequip implements HasPlugin {
     }
 
     void unequip(Player p, int slot) {
-        TokenManager.UnequipResult result = plugin.tokenManager().unequipToken(p, slot);
+        TokenManager.UnequipResult result = rmc.tokenManager().unequipToken(p, slot);
 
         String translationKey = switch (result) {
             case UNEQUIPPED -> "command.unequip.unequipped";
             case NO_TOKEN -> "command.unequip.noToken";
         };
-        p.sendMessage(plugin.richText().translatable(translationKey));
+        p.sendMessage(rmc.rt().translatable(translationKey));
     }
 }

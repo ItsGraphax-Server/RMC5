@@ -1,3 +1,8 @@
 crafts:
 
 currentEvent: NONE
+
+events:
+  bounty:
+    cycle: -1
+    previousWorldBorder:

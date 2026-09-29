@@ -35,6 +35,6 @@ public class FireToken extends Token {
         fireball.setAcceleration(direction.multiply(speed));
         fireball.setYield((float) strength);
 
-        plugin.getServer().sendMessage(plugin.richText().parse("<red><italic><bold>FIREBALL"));
+        rmc.getServer().sendMessage(rmc.rt().parse("<red><italic><bold>FIREBALL"));
     }
 }

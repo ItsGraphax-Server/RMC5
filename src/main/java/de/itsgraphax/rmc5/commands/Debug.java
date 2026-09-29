@@ -1,7 +1,6 @@
 package de.itsgraphax.rmc5.commands;
 
 import de.itsgraphax.grphxLib.citems.Citem;
-import de.itsgraphax.rmc5.HasPlugin;
 import de.itsgraphax.rmc5.commands.suggestions.customItem.CitemSuggestions;
 import de.itsgraphax.rmc5.events.EventIdentifier;
 import net.strokkur.commands.Command;
@@ -12,44 +11,47 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import static de.itsgraphax.rmc5.RmcPlugin.rmc;
+
 @Command("rmc")
 @RequiresOP
-public class Debug implements HasPlugin {
+public class Debug {
     @Executes("give")
     void giveToken(@Executor Player sender, @CitemSuggestions NamespacedKey key) {
         if (key == null) {
-            sender.sendMessage(plugin.richText().parse("<red>This is an invalid namespace!"));
+            sender.sendMessage(rmc.rt.parse("<red>This is an invalid namespace!"));
             return;
         }
 
-        Citem citem = plugin.citemManager().get(key);
+        Citem citem = rmc.cim.get(key);
         if (citem == null) {
-            sender.sendMessage(plugin.richText().parse("<red>This citem does not exist!"));
+            sender.sendMessage(rmc.rt.parse("<red>This citem does not exist!"));
             return;
         }
 
         sender.give(citem.createItem());
-        sender.sendMessage(plugin.richText().parse("<green>Gave you the citem!"));
+        sender.sendMessage(rmc.rt.parse("<green>Gave you the citem!"));
     }
 
     @Executes("reload")
     void reload(CommandSender sender) {
-        plugin.saveDefaultConfig();
+        rmc.saveDefaultConfig();
 
-        plugin.reloadConfig();
-        plugin.tokenManager().reloadConfig();
+        rmc.reloadConfig();
+        rmc.tokenManager.reloadConfig();
+        rmc.eventManager.reloadConfig();
 
-        sender.sendMessage(plugin.richText().parse("<green>Successfully reloaded config!"));
+        sender.sendMessage(rmc.rt.parse("<green>Successfully reloaded config!"));
     }
 
     @Executes("reset")
     void reset(Player p) {
-        plugin.tokenManager().reset(p);
+        rmc.tokenManager.reset(p);
     }
 
     @Executes("getTraderTime")
     void getTraderTime(CommandSender sender) {
-        Long next = plugin.getDataManager().getNextTrader();
+        Long next = rmc.data.getNextTrader();
         if (next == null) {
             sender.sendMessage("null");
             return;
@@ -59,11 +61,16 @@ public class Debug implements HasPlugin {
 
     @Executes("setTraderTime")
     void setTraderTime(int seconds) {
-        plugin.getDataManager().setNextTrader(System.currentTimeMillis() + (seconds * 1000L));
+        rmc.data.setNextTrader(System.currentTimeMillis() + (seconds * 1000L));
     }
 
     @Executes("setEvent")
-    void setEvent(CommandSender sender, String id) {
-        plugin.getDataManager().setCurrentEvent(EventIdentifier.valueOf(id));
+    void setEvent(String id) {
+        rmc.data.setCurrentEvent(EventIdentifier.valueOf(id));
+    }
+
+    @Executes("setCoins")
+    void setCoins(Player p, int amount) {
+        rmc.pdc.setBountyCoins(p, amount);
     }
 }

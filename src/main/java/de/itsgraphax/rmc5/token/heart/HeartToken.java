@@ -19,7 +19,7 @@ public class HeartToken extends Token {
         super(TokenIdentifier.HEART, TokenRarity.MYTHIC);
 
         mod = new AttributeModifier(
-                plugin.namespaces().heartModifier(),
+                rmc.namespaces().heartModifier(),
                 config.getInt("heartMod"),
                 AttributeModifier.Operation.ADD_NUMBER
         );

@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 
 public class CitemSuggestionsImpl implements HasPlugin {
-    private static final Collection<Citem> SUGGESTIONS = plugin.citemManager().values();
+    private static final Collection<Citem> SUGGESTIONS = rmc.cim().values();
 
     @CitemSuggestions
     public static CompletableFuture<Suggestions> provide(CommandContext<CommandSourceStack> ctx, SuggestionsBuilder builder) {

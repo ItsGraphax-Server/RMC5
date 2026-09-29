@@ -3,6 +3,7 @@ package de.itsgraphax.rmc5;
 import de.itsgraphax.grphxLib.citems.CitemListener;
 import de.itsgraphax.grphxLib.citems.CitemManager;
 import de.itsgraphax.grphxLib.shorthands.OnEnable;
+import de.itsgraphax.grphxLib.utils.ResourcepackSender;
 import de.itsgraphax.grphxLib.utils.RichText;
 import de.itsgraphax.rmc5.commands.DebugBrigadier;
 import de.itsgraphax.rmc5.commands.TokenBrigadier;
@@ -12,6 +13,7 @@ import de.itsgraphax.rmc5.customItems.listeners.AdvancementListener;
 import de.itsgraphax.rmc5.customItems.listeners.RecipeListener;
 import de.itsgraphax.rmc5.customItems.listeners.WanderingTraderListener;
 import de.itsgraphax.rmc5.customItems.recipes.RecipeManager;
+import de.itsgraphax.rmc5.events.EventManager;
 import de.itsgraphax.rmc5.managers.Namespaces;
 import de.itsgraphax.rmc5.managers.PdcData;
 import de.itsgraphax.rmc5.managers.RmcDataManager;
@@ -25,60 +27,65 @@ import de.itsgraphax.rmc5.token.TokenManager;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Set;
+import java.util.UUID;
 
 public final class RmcPlugin extends JavaPlugin {
-    private static RmcPlugin instance;
+    public static RmcPlugin rmc;
 
-    private final CitemManager citemManager = new CitemManager();
-    private final RichText richText = new RichText();
+    public final CitemManager cim = new CitemManager();
+    public final RichText rt = new RichText();
 
-    private final Namespaces namespaces = new Namespaces(this);
-    private final PdcData pdcData;
-    private final RmcDataManager dataManager;
+    public final Namespaces ns = new Namespaces(this);
+    public final PdcData pdc;
+    public final RmcDataManager data;
 
-    private final UIManager uiManager;
-    private TokenManager tokenManager;
+    public final UIManager uiManager;
+    public EventManager eventManager;
+    public TokenManager tokenManager;
 
     public RmcPlugin() {
         super();
 
-        instance = this;
+        rmc = this;
 
-        pdcData = new PdcData();
-        dataManager = new RmcDataManager();
+        pdc = new PdcData();
+        data = new RmcDataManager();
         uiManager = new UIManager();
     }
 
     @Override
     public void onEnable() {
         tokenManager = new TokenManager();
-        citemManager.register(new NoxiumIngot());
-        citemManager.register(new NoxiumNugget());
-        citemManager.register(new BlueMatter());
-        citemManager.register(new DarkMatter());
-        citemManager.register(new GoldenMatter());
-        citemManager.register(new Repairer());
+        eventManager = new EventManager();
+
+        cim.register(new NoxiumIngot());
+        cim.register(new NoxiumNugget());
+        cim.register(new BlueMatter());
+        cim.register(new DarkMatter());
+        cim.register(new GoldenMatter());
+        cim.register(new Repairer());
         RecipeManager.registerRecipe();
 
         saveDefaultConfig();
 
-        OnEnable.registerEvents(Set.of(
-                new CitemListener(citemManager),
+        OnEnable.registerEvents(this,
+                new CitemListener(cim),
                 new TokenListener(),
                 new AdvancementListener(),
                 new WanderingTraderListener(),
                 new RecipeListener(),
                 new DisableFireAspectListener(),
                 new NoMaceEnchantListener(),
-                new Cure4AllListener()
-        ), this);
-        OnEnable.registerEvents(tokenManager.allTokens(), this);
-        OnEnable.registerCommands(Set.of(
+                new Cure4AllListener(),
+                new ResourcepackSender("rmc5",
+                        UUID.fromString("a4cd4760-324a-4173-b4d8-7c69b19ac03f"))
+        );
+        OnEnable.registerEvents(this, tokenManager.allTokens());
+        OnEnable.registerCommands(this,
                 DebugBrigadier::register,
                 TokenBrigadier::register,
                 UnequipBrigadier::register
-        ), this);
+        );
 
         getServer().getScheduler().runTaskTimer(this, () -> {
             tokenManager.tick();
@@ -86,42 +93,50 @@ public final class RmcPlugin extends JavaPlugin {
             uiManager.render();
         }, 1, 1);
 
-        logger().info(richText.parse("RmcPlugin successfully enabled"));
+        logger().info(rt.parse("RmcPlugin successfully enabled"));
     }
 
     @Override
     public void onDisable() {
-        logger().info(richText.parse("RmcPlugin successfully disabled"));
+        logger().info(rt.parse("RmcPlugin successfully disabled"));
     }
 
+    @Deprecated
     public static RmcPlugin instance() {
-        return instance;
+        return rmc;
     }
 
+    @Deprecated
     public ComponentLogger logger() {
         return getComponentLogger();
     }
 
-    public CitemManager citemManager() {
-        return citemManager;
+    @Deprecated
+    public CitemManager cim() {
+        return cim;
     }
 
-    public RichText richText() {
-        return richText;
+    @Deprecated
+    public RichText rt() {
+        return rt;
     }
 
+    @Deprecated
     public Namespaces namespaces() {
-        return namespaces;
+        return ns;
     }
 
-    public PdcData getPdcData() {
-        return pdcData;
+    @Deprecated
+    public PdcData pdc() {
+        return pdc;
     }
 
-    public RmcDataManager getDataManager() {
-        return dataManager;
+    @Deprecated
+    public RmcDataManager data() {
+        return data;
     }
 
+    @Deprecated
     public TokenManager tokenManager() {
         return tokenManager;
     }

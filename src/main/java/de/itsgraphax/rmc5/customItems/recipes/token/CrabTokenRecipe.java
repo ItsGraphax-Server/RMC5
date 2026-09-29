@@ -17,7 +17,7 @@ import org.bukkit.potion.PotionEffectType;
 
 public class CrabTokenRecipe implements RecipeHelper {
     public static void register() {
-        Citem token = plugin.tokenManager().tokenFromId(TokenIdentifier.CRAB);
+        Citem token = rmc.tokenManager().tokenFromId(TokenIdentifier.CRAB);
         Citem noxiumIngot = ci.get(ns.itemNoxiumIngot());
         assert noxiumIngot != null;
 

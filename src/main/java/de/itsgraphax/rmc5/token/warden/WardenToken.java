@@ -53,7 +53,7 @@ public class WardenToken extends Token {
             e.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, config.getInt("activeDuration", 10) * 20, 0));
 
             // Teleport entity back to old location after activeDuration seconds
-            plugin.getServer().getScheduler().runTaskLater(plugin, () -> e.teleport(locCopy, PlayerTeleportEvent.TeleportCause.PLUGIN), config.getLong("activeDuration", 10) * 20);
+            rmc.getServer().getScheduler().runTaskLater(rmc, () -> e.teleport(locCopy, PlayerTeleportEvent.TeleportCause.PLUGIN), config.getLong("activeDuration", 10) * 20);
         });
 
         p.removePotionEffect(PotionEffectType.DARKNESS);
@@ -61,7 +61,7 @@ public class WardenToken extends Token {
         worldManager.getSpawn().getWorld().playSound(worldManager.getSpawn(),
                 Sound.ENTITY_CREAKING_UNFREEZE, 2, 1);
 
-        plugin.getServer().sendMessage(plugin.richText().parse("<black><italic><bold>DOMAIN EXPANSION ABYSSAL VOID"));
+        rmc.getServer().sendMessage(rmc.rt().parse("<black><italic><bold>DOMAIN EXPANSION ABYSSAL VOID"));
     }
 
     @EventHandler
@@ -74,7 +74,7 @@ public class WardenToken extends Token {
 
         placedBlocks.add(loc);
 
-        plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+        rmc.getServer().getScheduler().runTaskLater(rmc, () -> {
             block.setType(Material.AIR);
             placedBlocks.remove(loc);
         }, 200);

@@ -1,11 +1,15 @@
 package de.itsgraphax.rmc5.misc;
 
+import com.destroystokyo.paper.profile.PlayerProfile;
 import de.itsgraphax.rmc5.HasPlugin;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
+
+import java.util.function.Consumer;
 
 public class Utils implements HasPlugin {
     public static <T> void circleParticles(Location oLoc, float radius, float spacing, Particle particleType, T data) {
@@ -32,5 +36,11 @@ public class Utils implements HasPlugin {
 
     public static Audience getOnlineAudience() {
         return Audience.audience(Bukkit.getOnlinePlayers());
+    }
+
+    public static void editPlayerProfile(Player p, Consumer<PlayerProfile> c) {
+        PlayerProfile profile = p.getPlayerProfile();
+        c.accept(profile);
+        p.setPlayerProfile(profile);
     }
 }

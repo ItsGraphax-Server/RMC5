@@ -12,6 +12,6 @@ public class LegacyCreakingToken extends Token {
 
     @Override
     public void onTick(Player p) {
-        plugin.getPdcData().setEquippedToken(p, getSlot(), TokenIdentifier.WARDEN);
+        rmc.pdc().setEquippedToken(p, getSlot(), TokenIdentifier.WARDEN);
     }
 }

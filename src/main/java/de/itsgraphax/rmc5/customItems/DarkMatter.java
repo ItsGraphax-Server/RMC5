@@ -5,6 +5,6 @@ import de.itsgraphax.rmc5.HasPlugin;
 
 public class DarkMatter extends Citem implements HasPlugin {
     public DarkMatter() {
-        super(plugin.namespaces().itemDarkMatter());
+        super(rmc.namespaces().itemDarkMatter());
     }
 }

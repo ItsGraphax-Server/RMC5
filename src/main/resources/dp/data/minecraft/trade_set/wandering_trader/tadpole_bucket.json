@@ -1,0 +1,12 @@
+{
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 9
+  },
+  "additional_wants": {
+    "id": "minecraft:magma_cream"
+  },
+  "gives": {
+    "id": "minecraft:tadpole_bucket"
+  }
+}
