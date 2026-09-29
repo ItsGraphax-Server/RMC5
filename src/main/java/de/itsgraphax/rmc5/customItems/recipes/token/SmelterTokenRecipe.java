@@ -9,7 +9,7 @@ import org.bukkit.inventory.ShapedRecipe;
 
 public class SmelterTokenRecipe implements RecipeHelper {
     public static void register() {
-        Citem token = plugin.tokenManager().tokenFromId(TokenIdentifier.SMELTER);
+        Citem token = rmc.tokenManager().tokenFromId(TokenIdentifier.SMELTER);
         Citem noxiumIngot = ci.get(ns.itemNoxiumIngot());
         assert noxiumIngot != null;
 

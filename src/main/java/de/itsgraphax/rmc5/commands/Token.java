@@ -1,6 +1,5 @@
 package de.itsgraphax.rmc5.commands;
 
-import de.itsgraphax.rmc5.HasPlugin;
 import de.itsgraphax.rmc5.token.TokenIdentifier;
 import net.strokkur.commands.Command;
 import net.strokkur.commands.Executes;
@@ -10,9 +9,11 @@ import org.bukkit.entity.Player;
 
 import java.time.LocalDateTime;
 
+import static de.itsgraphax.rmc5.RmcPlugin.rmc;
+
 @Command("token")
 @Description("Triggers a token")
-public class Token implements HasPlugin {
+public class Token {
     @Executes("left")
     void triggerLeft(@Executor Player p) {
         trigger(p, 0);
@@ -23,26 +24,26 @@ public class Token implements HasPlugin {
     }
 
     void trigger(Player p, int slot) {
-        TokenIdentifier id = plugin.getPdcData().getEquippedToken(p, slot);
-        boolean broken = plugin.getPdcData().getEquippedBroken(p, slot);
+        TokenIdentifier id = rmc.pdc.getEquippedToken(p, slot);
+        boolean broken = rmc.pdc.getEquippedBroken(p, slot);
         if (id == TokenIdentifier.UNKNOWN) {
-            p.sendMessage(plugin.richText().translatable("command.trigger.noToken"));
+            p.sendMessage(rmc.rt.translatable("command.trigger.noToken"));
             return;
         }
         if (broken) {
-            p.sendMessage(plugin.richText().translatable("command.trigger.broken"));
+            p.sendMessage(rmc.rt.translatable("command.trigger.broken"));
             return;
         }
 
-        de.itsgraphax.rmc5.token.Token token = plugin.tokenManager().tokenFromId(id);
+        de.itsgraphax.rmc5.token.Token token = rmc.tokenManager.tokenFromId(id);
 
         if (token.onCooldown(p)) {
-            p.sendMessage(plugin.richText().translatable("command.trigger.onCooldown"));
+            p.sendMessage(rmc.rt.translatable("command.trigger.onCooldown"));
             return;
         }
 
         token.onTrigger(p);
 
-        plugin.getPdcData().setLastUse(p, id, LocalDateTime.now());
+        rmc.pdc.setLastUse(p, id, LocalDateTime.now());
     }
 }

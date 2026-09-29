@@ -21,8 +21,8 @@ public class WanderingTraderListener implements Listener, HasPlugin {
         List<MerchantRecipe> trades = new ArrayList<>(entity.getRecipes());
 
         Citem citem;
-        if (Math.random() < 0.05) citem = plugin.citemManager().get(plugin.namespaces().itemDarkMatter());
-        else citem = plugin.citemManager().get(plugin.namespaces().itemBlueMatter());
+        if (Math.random() < 0.05) citem = rmc.cim().get(rmc.namespaces().itemDarkMatter());
+        else citem = rmc.cim().get(rmc.namespaces().itemBlueMatter());
         assert citem != null;
 
         ItemStack result = citem.createItem();

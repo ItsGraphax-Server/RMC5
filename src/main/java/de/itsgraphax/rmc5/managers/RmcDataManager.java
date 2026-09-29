@@ -6,6 +6,8 @@ import de.itsgraphax.rmc5.events.EventIdentifier;
 import de.itsgraphax.rmc5.token.TokenIdentifier;
 import org.jetbrains.annotations.Nullable;
 
+import static de.itsgraphax.rmc5.RmcPlugin.rmc;
+
 public class RmcDataManager extends DataManager {
     public RmcDataManager() {
         super("data.yml", RmcPlugin.instance());
@@ -31,6 +33,17 @@ public class RmcDataManager extends DataManager {
         return EventIdentifier.valueOf(data.getString("currentEvent", "NONE"));
     }
     public void setCurrentEvent(EventIdentifier id) {
+        EventIdentifier lastEvent = getCurrentEvent();
         data.set("currentEvent", id.toString());
+        rmc.eventManager.getEvent(lastEvent).onEnd();
+        rmc.eventManager.getEvent(id).onStart();
+    }
+
+    public Integer getBountyCycle() {
+        return data.getInt("events.bounty.cycle", -1);
+    }
+    public void setBountyCycle(int val) {
+        data.set("events.bounty.cycle", val);
+        save();
     }
 }

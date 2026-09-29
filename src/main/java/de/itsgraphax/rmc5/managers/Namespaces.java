@@ -84,8 +84,17 @@ public class Namespaces extends NamespacesBase {
         return key("token.cooldown." + id.id());
     }
 
-    public NamespacedKey pdcBountyWallet() {
-        return key("bountyWallet");
+    public NamespacedKey pdcBountyCoins() {
+        return key("bounty.coins");
+    }
+    public NamespacedKey pdcBountyBounty() {
+        return key("bounty.bounty");
+    }
+    public NamespacedKey pdcBountyLastClaimedCycle() {
+        return key("bounty.lastclaimedcycle");
+    }
+    public NamespacedKey pdcBountyLastUpdateCycle() {
+        return key("bounty.lastUpdateCycle");
     }
 
     public NamespacedKey pdcItemTokenBroken() {

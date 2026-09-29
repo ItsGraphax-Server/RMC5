@@ -11,7 +11,7 @@ import org.bukkit.inventory.ShapedRecipe;
 public class RepairRecipe implements RecipeHelper {
     public static void register() {
         Citem repairer = ci.get(ns.itemRepairer());
-        Citem token = plugin.tokenManager().tokenFromId(TokenIdentifier.UNKNOWN);
+        Citem token = rmc.tokenManager().tokenFromId(TokenIdentifier.UNKNOWN);
         assert repairer != null;
 
         ShapedRecipe recipe = new ShapedRecipe(ns.recipeRepair(), ItemStack.of(Material.BARRIER));

@@ -5,6 +5,6 @@ import de.itsgraphax.rmc5.HasPlugin;
 
 public class NoxiumIngot extends Citem implements HasPlugin {
     public NoxiumIngot() {
-        super(plugin.namespaces().itemNoxiumIngot());
+        super(rmc.namespaces().itemNoxiumIngot());
     }
 }

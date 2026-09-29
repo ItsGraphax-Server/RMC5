@@ -26,7 +26,7 @@ public class AirToken extends Token {
         super(TokenIdentifier.AIR, TokenRarity.RARE);
     }
 
-    private static final AttributeModifier mod = new AttributeModifier(plugin.namespaces().airModifier(),
+    private static final AttributeModifier mod = new AttributeModifier(rmc.ns.airModifier(),
             -1, AttributeModifier.Operation.MULTIPLY_SCALAR_1);
 
     @Override

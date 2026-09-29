@@ -1,7 +1,6 @@
 package de.itsgraphax.rmc5.managers;
 
 import de.itsgraphax.grphxLib.utils.PdcDataBase;
-import de.itsgraphax.rmc5.HasPlugin;
 import de.itsgraphax.rmc5.token.TokenIdentifier;
 import io.papermc.paper.persistence.PersistentDataContainerView;
 import org.bukkit.NamespacedKey;
@@ -14,8 +13,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.time.LocalDateTime;
 
-public class PdcData extends PdcDataBase implements HasPlugin {
-    private final @NotNull Namespaces ns = plugin.namespaces();
+import static de.itsgraphax.rmc5.RmcPlugin.rmc;
+
+public class PdcData extends PdcDataBase {
+    private final @NotNull Namespaces ns = rmc.ns;
 
     public PdcData() {
         super();
@@ -71,11 +72,27 @@ public class PdcData extends PdcDataBase implements HasPlugin {
         pdc(p).remove(ns.pdcLastTokenUse(id));
     }
 
-    public int getBountyWallet(@NotNull Player p) {
-        return pdc(p).getOrDefault(ns.pdcBountyWallet(), PersistentDataType.INTEGER, 0);
+    public int getBountyCoins(@NotNull Player p) {
+        return pdc(p).getOrDefault(ns.pdcBountyCoins(), PersistentDataType.INTEGER, 0);
     }
-    public void setBountyWallet(@NotNull Player p, int val) {
-        pdc(p).set(ns.pdcBountyWallet(), PersistentDataType.INTEGER, val);
+    public void setBountyCoins(@NotNull Player p, int val) {
+        pdc(p).set(ns.pdcBountyCoins(), PersistentDataType.INTEGER, val);}
+    public int getBountyBounty(@NotNull Player p) {
+        return pdc(p).getOrDefault(ns.pdcBountyBounty(), PersistentDataType.INTEGER, 0);
+    }
+    public void setBountyBounty(@NotNull Player p, int val) {
+        pdc(p).set(ns.pdcBountyBounty(), PersistentDataType.INTEGER, val);}
+    public int getBountyLastUpdateCycle(@NotNull Player p) {
+        return pdc(p).getOrDefault(ns.pdcBountyLastUpdateCycle(), PersistentDataType.INTEGER, -1);
+    }
+    public void setBountyLastUpdateCycle(@NotNull Player p, int val) {
+        pdc(p).set(ns.pdcBountyLastUpdateCycle(), PersistentDataType.INTEGER, val);
+    }
+    public int getBountyLastClaimedCycle(@NotNull Player p) {
+        return pdc(p).getOrDefault(ns.pdcBountyLastClaimedCycle(), PersistentDataType.INTEGER, -1);
+    }
+    public void setBountyLastClaimedCycle(@NotNull Player p, int val) {
+        pdc(p).set(ns.pdcBountyLastClaimedCycle(), PersistentDataType.INTEGER, val);
     }
 
     public boolean getItemBroken(@NotNull ItemStack item) {

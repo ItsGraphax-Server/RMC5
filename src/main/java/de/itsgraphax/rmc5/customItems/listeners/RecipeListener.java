@@ -13,15 +13,15 @@ public class RecipeListener implements Listener, HasPlugin {
     @EventHandler
     void onPrepCraft(PrepareItemCraftEvent e) {
         if (!(e.getRecipe() instanceof CraftingRecipe recipe)) return;
-        if (!recipe.getKey().equals(plugin.namespaces().recipeRepair())) return;
+        if (!recipe.getKey().equals(rmc.namespaces().recipeRepair())) return;
 
         CraftingInventory inv = e.getInventory();
         ItemStack tokenItem = inv.getItem(1);
         assert tokenItem != null;
 
-        if (!plugin.getPdcData().getItemBroken(tokenItem)) inv.setResult(null);
+        if (!rmc.pdc().getItemBroken(tokenItem)) inv.setResult(null);
         else {
-            Token token = plugin.tokenManager().tokenFromItem(tokenItem);
+            Token token = rmc.tokenManager().tokenFromItem(tokenItem);
             inv.setResult(token.createItem(false));
         }
     }

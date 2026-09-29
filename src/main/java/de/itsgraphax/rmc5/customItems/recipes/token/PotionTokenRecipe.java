@@ -9,7 +9,7 @@ import org.bukkit.inventory.ShapedRecipe;
 
 public class PotionTokenRecipe implements RecipeHelper {
     public static void register() {
-        Citem token = plugin.tokenManager().tokenFromId(TokenIdentifier.POTION);
+        Citem token = rmc.tokenManager().tokenFromId(TokenIdentifier.POTION);
         Citem noxiumIngot = ci.get(ns.itemNoxiumIngot());
         assert noxiumIngot != null;
 

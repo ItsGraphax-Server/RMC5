@@ -38,7 +38,7 @@ public class SmelterToken extends Token {
     private @Nullable ItemStack getFirstApplicableRecipeResult(ItemStack item) {
         ItemStack result = null;
 
-        for (@NotNull Iterator<Recipe> it = plugin.getServer().recipeIterator(); it.hasNext(); ) {
+        for (@NotNull Iterator<Recipe> it = rmc.getServer().recipeIterator(); it.hasNext(); ) {
             Recipe unspecificRecipe = it.next();
             if (!(unspecificRecipe instanceof FurnaceRecipe recipe)) continue;
 
@@ -133,15 +133,15 @@ public class SmelterToken extends Token {
 
     @Override
     public void onJoin(Player p) {
-        if (plugin.getPdcData().getSmelterOverheating(p) > 0) {
+        if (rmc.pdc().getSmelterOverheating(p) > 0) {
             p.removePotionEffect(PotionEffectType.STRENGTH);
-            plugin.getPdcData().setSmelterOverheating(p, 0);
+            rmc.pdc().setSmelterOverheating(p, 0);
         }
     }
 
     @Override
     public void onTick(Player p) {
-        if (plugin.getPdcData().getSmelterOverheating(p) > 0) p.setFoodLevel(6);
+        if (rmc.pdc().getSmelterOverheating(p) > 0) p.setFoodLevel(6);
     }
 
     @Override
@@ -149,9 +149,9 @@ public class SmelterToken extends Token {
         int duration = config.getInt("duration") * 20;
 
         p.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, duration, 2));
-        plugin.getPdcData().setSmelterOverheating(p, 1);
-        plugin.getServer().getScheduler().runTaskLater(plugin,
-                () -> plugin.getPdcData().setSmelterOverheating(p, 0),
+        rmc.pdc().setSmelterOverheating(p, 1);
+        rmc.getServer().getScheduler().runTaskLater(rmc,
+                () -> rmc.pdc().setSmelterOverheating(p, 0),
                 duration);
 
         p.getWorld().playSound(
@@ -164,9 +164,9 @@ public class SmelterToken extends Token {
 
     @Override
     public void onUnequip(Player p) {
-        if (plugin.getPdcData().getSmelterOverheating(p) > 0) {
+        if (rmc.pdc().getSmelterOverheating(p) > 0) {
             p.removePotionEffect(PotionEffectType.STRENGTH);
-            plugin.getPdcData().setSmelterOverheating(p, 0);
+            rmc.pdc().setSmelterOverheating(p, 0);
         }
     }
 }

@@ -11,10 +11,10 @@ import org.bukkit.event.inventory.CraftItemEvent;
 public class TokenListener implements HasPlugin, Listener {
     @EventHandler
     void onDeath(PlayerDeathEvent e) {
-        PdcData pdcData = plugin.getPdcData();
+        PdcData pdcData = rmc.pdc();
         Player p = e.getPlayer();
         for (int slot = 0; slot < 2; slot++) { // loop over slots
-            Token token = plugin.tokenManager().tokenFromId(pdcData.getEquippedToken(p, slot));
+            Token token = rmc.tokenManager().tokenFromId(pdcData.getEquippedToken(p, slot));
             if (token.getId() != TokenIdentifier.UNKNOWN &&
             !pdcData.getEquippedBroken(p, slot)) {
                 pdcData.setEquippedBroken(e.getPlayer(), slot, true);
@@ -25,22 +25,22 @@ public class TokenListener implements HasPlugin, Listener {
 
     @EventHandler
     void onCraft(CraftItemEvent e) {
-        Token token = plugin.tokenManager().tokenFromItem(e.getRecipe().getResult());
+        Token token = rmc.tokenManager().tokenFromItem(e.getRecipe().getResult());
         if (!(e.getView().getPlayer() instanceof Player p)) return;
         if (token.getRarity() != TokenRarity.EPIC) return;
 
-        int tokenCrafts = plugin.getDataManager().getCrafts(token.getId());
-        int playerCrafts = plugin.getPdcData().getRareCrafts(p);
+        int tokenCrafts = rmc.data().getCrafts(token.getId());
+        int playerCrafts = rmc.pdc().getRareCrafts(p);
 
         if (tokenCrafts >= token.getConfig().getInt("maxCrafts", 3) ||
-                playerCrafts >= plugin.getConfig().getInt("maxRareCrafts", 1)) {
-            p.sendMessage(plugin.richText().translatable("error.maxCrafts"));
+                playerCrafts >= rmc.getConfig().getInt("maxRareCrafts", 1)) {
+            p.sendMessage(rmc.rt().translatable("error.maxCrafts"));
             e.setCancelled(true);
             return;
         }
 
 
-        plugin.getDataManager().setCrafts(token.getId(), tokenCrafts + 1);
-        plugin.getPdcData().setRareCrafts(p, playerCrafts + 1);
+        rmc.data().setCrafts(token.getId(), tokenCrafts + 1);
+        rmc.pdc().setRareCrafts(p, playerCrafts + 1);
     }
 }

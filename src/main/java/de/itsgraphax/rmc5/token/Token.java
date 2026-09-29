@@ -28,7 +28,7 @@ public abstract class Token extends Citem implements HasPlugin, Listener {
     protected ConfigurationSection config;
 
     public Token(TokenIdentifier id, TokenRarity rarity) {
-        super(plugin.namespaces().itemToken(id));
+        super(rmc.namespaces().itemToken(id));
 
         this.id = id;
         this.rarity = rarity;
@@ -36,7 +36,7 @@ public abstract class Token extends Citem implements HasPlugin, Listener {
     }
 
     public void reloadConfig() {
-        config = plugin.getConfig().getConfigurationSection("tokens." + id.id());
+        config = rmc.getConfig().getConfigurationSection("tokens." + id.id());
     }
 
     @Override
@@ -44,7 +44,7 @@ public abstract class Token extends Citem implements HasPlugin, Listener {
         ItemStack item = event.getItem();
         assert item != null;
         Player p = event.getPlayer();
-        PdcData pdcData = plugin.getPdcData();
+        PdcData pdcData = rmc.pdc();
 
         boolean broken = pdcData.getItemBroken(item);
         int slot = getSlot();
@@ -54,7 +54,7 @@ public abstract class Token extends Citem implements HasPlugin, Listener {
         // Unequip if there is already an equipped token
         TokenIdentifier currentlyEquipped = pdcData.getEquippedToken(p, slot);
         if (currentlyEquipped != TokenIdentifier.UNKNOWN) {
-            plugin.tokenManager().unequipToken(p, slot);
+            rmc.tokenManager().unequipToken(p, slot);
         }
 
         pdcData.setEquippedToken(p, slot, id);
@@ -86,8 +86,8 @@ public abstract class Token extends Citem implements HasPlugin, Listener {
     public boolean hasWorkingToken(Player p) {
         for (int slot = 0; slot < 2; slot++) { // iterate over all slots
             if (
-                    plugin.getPdcData().getEquippedToken(p, slot) == id &&
-                            !plugin.getPdcData().getEquippedBroken(p, slot)
+                    rmc.pdc().getEquippedToken(p, slot) == id &&
+                            !rmc.pdc().getEquippedBroken(p, slot)
             ) return true;
         }
         return false;
@@ -119,7 +119,7 @@ public abstract class Token extends Citem implements HasPlugin, Listener {
     }
 
     public long secondsSinceLastUse(Player p) {
-        LocalDateTime lastUse = plugin.getPdcData().getLastUse(p, id);
+        LocalDateTime lastUse = rmc.pdc().getLastUse(p, id);
         int baseCooldown = getBaseCooldown();
 
         return Duration.between(lastUse, LocalDateTime.now()).toSeconds();
@@ -148,7 +148,7 @@ public abstract class Token extends Citem implements HasPlugin, Listener {
     }
 
     public String getSprite(Player p, int slot) {
-        String broken = plugin.getPdcData().getEquippedBroken(p, slot) ? "_broken" : "";
+        String broken = rmc.pdc().getEquippedBroken(p, slot) ? "_broken" : "";
         return String.format("items:rmc5/token%s/%s", broken, id.id().toLowerCase());
     }
 
@@ -175,8 +175,8 @@ public abstract class Token extends Citem implements HasPlugin, Listener {
 
     public @NotNull ItemStack createItem(boolean broken) {
         ItemStack ret = super.createItem();
-        plugin.getPdcData().setItemToken(ret, id);
-        plugin.getPdcData().setItemBroken(ret, broken);
+        rmc.pdc().setItemToken(ret, id);
+        rmc.pdc().setItemBroken(ret, broken);
 
         NamespacedKey newKey = getKey(broken);
 

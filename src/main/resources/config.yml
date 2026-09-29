@@ -121,6 +121,31 @@ trader:
   max: 240
   kill: 15
 
+events:
+  NONE:
+  BOUNTY:
+    # Multipliers to the base value. All those values add up to the final bounty multiplied by the random range
+    bountyMultipliers:
+      # Hours of playtime
+      playtimeHours: 1.5
+      # Armor (counted once per piece)
+      # None, Other,  Leather,  Copper, Chainmail,  Iron, Gold, Diamond,  Netherite
+      # -4    4       2         2       2           6     4     10        12
+      armor: 5
+      # Amount of kills
+      kills: 2.5
+      # Amount of deaths
+      deaths: -0.1
+      # Amount of coins currently posessed.
+      coins: 0.35
+
+      # Random multiplier
+      minRand: 0.8
+      maxRand: 1.25
+
+    # The killed/popped player gets a reduction of bounty * multiplier
+    killedReductionMultiplier: 0.5
+
 titles:
   traderSpawned: "<light_blue>A Wandering Trader has appeared!"
 subtitles:

@@ -1,5 +1,6 @@
 package de.itsgraphax.rmc5;
 
+@Deprecated
 public interface HasPlugin {
-    RmcPlugin plugin = RmcPlugin.instance();
+    RmcPlugin rmc = RmcPlugin.instance();
 }

@@ -2,5 +2,6 @@
   "values": [
     "minecraft:cartographer/2/glass_pane_emerald",
     "minecraft:cartographer/4/emerald_item_frame"
-  ]
+  ],
+  "replace": true
 }

@@ -9,7 +9,7 @@ import org.bukkit.inventory.ShapedRecipe;
 
 public class FireTokenRecipe implements RecipeHelper {
     public static void register() {
-        Citem token = plugin.tokenManager().tokenFromId(TokenIdentifier.FIRE);
+        Citem token = rmc.tokenManager().tokenFromId(TokenIdentifier.FIRE);
         Citem noxiumIngot = ci.get(ns.itemNoxiumIngot());
         assert noxiumIngot != null;
 
