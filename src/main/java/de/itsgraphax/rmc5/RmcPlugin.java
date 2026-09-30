@@ -78,7 +78,7 @@ public final class RmcPlugin extends JavaPlugin {
                 new NoMaceEnchantListener(),
                 new Cure4AllListener(),
                 new ResourcepackSender("rmc5",
-                        UUID.fromString("a4cd4760-324a-4173-b4d8-7c69b19ac03f"))
+                        UUID.fromString("1.0.0"))
         );
         OnEnable.registerEvents(this, tokenManager.allTokens());
         OnEnable.registerCommands(this,
