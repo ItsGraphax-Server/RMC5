@@ -1,7 +1,6 @@
 package de.itsgraphax.rmc5.managers;
 
 import de.itsgraphax.grphxLib.utils.DataManager;
-import de.itsgraphax.rmc5.RmcPlugin;
 import de.itsgraphax.rmc5.events.EventIdentifier;
 import de.itsgraphax.rmc5.token.TokenIdentifier;
 import org.jetbrains.annotations.Nullable;
@@ -10,7 +9,7 @@ import static de.itsgraphax.rmc5.RmcPlugin.rmc;
 
 public class RmcDataManager extends DataManager {
     public RmcDataManager() {
-        super("data.yml", RmcPlugin.instance());
+        super("data.yml", rmc);
     }
 
     public int getCrafts(TokenIdentifier id) {

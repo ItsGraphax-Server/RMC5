@@ -5,6 +5,6 @@ import de.itsgraphax.rmc5.HasPlugin;
 
 public class BlueMatter extends Citem implements HasPlugin {
     public BlueMatter() {
-        super(rmc.namespaces().itemBlueMatter());
+        super(rmc.ns().itemBlueMatter());
     }
 }

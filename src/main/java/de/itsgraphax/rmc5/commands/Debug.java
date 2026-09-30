@@ -5,6 +5,7 @@ import de.itsgraphax.rmc5.commands.suggestions.customItem.CitemSuggestions;
 import de.itsgraphax.rmc5.events.EventIdentifier;
 import net.strokkur.commands.Command;
 import net.strokkur.commands.Executes;
+import net.strokkur.commands.Subcommand;
 import net.strokkur.commands.paper.Executor;
 import net.strokkur.commands.paper.RequiresOP;
 import org.bukkit.NamespacedKey;
@@ -17,7 +18,7 @@ import static de.itsgraphax.rmc5.RmcPlugin.rmc;
 @RequiresOP
 public class Debug {
     @Executes("give")
-    void giveToken(@Executor Player sender, @CitemSuggestions NamespacedKey key) {
+    void give(@Executor Player sender, @CitemSuggestions NamespacedKey key) {
         if (key == null) {
             sender.sendMessage(rmc.rt.parse("<red>This is an invalid namespace!"));
             return;
@@ -49,28 +50,58 @@ public class Debug {
         rmc.tokenManager.reset(p);
     }
 
-    @Executes("getTraderTime")
-    void getTraderTime(CommandSender sender) {
-        Long next = rmc.data.getNextTrader();
-        if (next == null) {
-            sender.sendMessage("null");
-            return;
+    @Subcommand("trader")
+    static class TraderSub {
+        @Executes("getTime")
+        void getTime(CommandSender sender) {
+            Long next = rmc.data.getNextTrader();
+            if (next == null) {
+                sender.sendMessage("null");
+                return;
+            }
+            sender.sendMessage(String.valueOf((next - System.currentTimeMillis()) / 1000));
         }
-        sender.sendMessage(String.valueOf((next - System.currentTimeMillis()) / 1000));
+
+        @Executes("setTime")
+        void setTime(int seconds) {
+            rmc.data.setNextTrader(System.currentTimeMillis() + (seconds * 1000L));
+        }
     }
 
-    @Executes("setTraderTime")
-    void setTraderTime(int seconds) {
-        rmc.data.setNextTrader(System.currentTimeMillis() + (seconds * 1000L));
+    @Subcommand("bounty")
+    static class BountySub {
+        @Subcommand("coins")
+        static class BountyCoinsSub {
+            @Executes("set")
+            void setCoins(Player p, int amount) {
+                rmc.pdc.setBountyCoins(p, amount);
+            }
+
+            @Executes("get")
+            void getCoins(CommandSender s, Player p) {
+                s.sendMessage(String.valueOf(rmc.pdc.getBountyCoins(p)));
+            }
+        }
+
+        @Subcommand("bounty")
+        static class BountyBountySub {
+            @Executes("set")
+            void setBounty(Player p, int val) {
+                rmc.pdc.setBountyBounty(p, val);
+            }
+
+            @Executes("get")
+            void getBounty(CommandSender s, Player p) {
+                s.sendMessage(String.valueOf(rmc.pdc.getBountyBounty(p)));
+            }
+        }
     }
 
-    @Executes("setEvent")
-    void setEvent(String id) {
-        rmc.data.setCurrentEvent(EventIdentifier.valueOf(id));
-    }
-
-    @Executes("setCoins")
-    void setCoins(Player p, int amount) {
-        rmc.pdc.setBountyCoins(p, amount);
+    @Subcommand("event")
+    static class EventSub {
+        @Executes("set")
+        void setEvent(String id) {
+            rmc.data.setCurrentEvent(EventIdentifier.valueOf(id));
+        }
     }
 }

@@ -3,7 +3,6 @@ package de.itsgraphax.rmc5.token;
 import de.itsgraphax.rmc5.token.air.AirToken;
 import de.itsgraphax.rmc5.token.crab.CrabToken;
 import de.itsgraphax.rmc5.token.heart.HeartToken;
-import de.itsgraphax.rmc5.token.legacyCreaking.LegacyCreakingToken;
 import de.itsgraphax.rmc5.token.villager.VillagerToken;
 import de.itsgraphax.rmc5.token.warden.WardenToken;
 import de.itsgraphax.rmc5.token.fire.FireToken;
@@ -20,7 +19,6 @@ public enum TokenIdentifier {
     UNKNOWN(UnknownToken::new),
     FIRE(FireToken::new),
     WARDEN(WardenToken::new),
-    CREAKING(LegacyCreakingToken::new),
     SMELTER(SmelterToken::new),
     AIR(AirToken::new),
     CRAB(CrabToken::new),

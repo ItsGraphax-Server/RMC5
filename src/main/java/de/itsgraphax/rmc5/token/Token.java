@@ -28,7 +28,7 @@ public abstract class Token extends Citem implements HasPlugin, Listener {
     protected ConfigurationSection config;
 
     public Token(TokenIdentifier id, TokenRarity rarity) {
-        super(rmc.namespaces().itemToken(id));
+        super(rmc.ns().itemToken(id));
 
         this.id = id;
         this.rarity = rarity;

@@ -62,14 +62,6 @@ public class AirToken extends Token {
     }
 
 
-    private static void launchForward(Player player, double strength) {
-        Vector dir = player.getLocation().getDirection();
-        dir.multiply(strength);
-        dir.add(new Vector(0, 0.5, 0)); // so one dosent get stuck to a 1block wall
-        player.setVelocity(dir);
-    }
-
-
     @Override
     public void onTrigger(Player p) {
         // tp up to remove floor drag

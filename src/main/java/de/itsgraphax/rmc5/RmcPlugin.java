@@ -77,8 +77,7 @@ public final class RmcPlugin extends JavaPlugin {
                 new DisableFireAspectListener(),
                 new NoMaceEnchantListener(),
                 new Cure4AllListener(),
-                new ResourcepackSender("rmc5",
-                        UUID.fromString("1.0.0"))
+                new ResourcepackSender("rmc5", "1.0.0")
         );
         OnEnable.registerEvents(this, tokenManager.allTokens());
         OnEnable.registerCommands(this,
@@ -122,7 +121,7 @@ public final class RmcPlugin extends JavaPlugin {
     }
 
     @Deprecated
-    public Namespaces namespaces() {
+    public Namespaces ns() {
         return ns;
     }
 

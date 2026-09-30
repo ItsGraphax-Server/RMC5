@@ -6,7 +6,7 @@ import de.itsgraphax.rmc5.managers.Namespaces;
 import org.bukkit.Server;
 
 public interface RecipeHelper extends HasPlugin {
-    Namespaces ns = rmc.namespaces();
+    Namespaces ns = rmc.ns();
     CitemManager ci = rmc.cim();
     Server s = rmc.getServer();
 }

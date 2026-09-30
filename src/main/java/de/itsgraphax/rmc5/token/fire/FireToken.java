@@ -11,7 +11,7 @@ import org.bukkit.util.Vector;
 
 public class FireToken extends Token {
     public FireToken() {
-        super(TokenIdentifier.FIRE, TokenRarity.EPIC);
+        super(TokenIdentifier.FIRE, TokenRarity.RARE);
     }
 
     @Override

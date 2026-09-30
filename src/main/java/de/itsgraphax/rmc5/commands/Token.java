@@ -27,18 +27,18 @@ public class Token {
         TokenIdentifier id = rmc.pdc.getEquippedToken(p, slot);
         boolean broken = rmc.pdc.getEquippedBroken(p, slot);
         if (id == TokenIdentifier.UNKNOWN) {
-            p.sendMessage(rmc.rt.translatable("command.trigger.noToken"));
+            p.sendMessage(rmc.rt.translatable("command.token.noToken"));
             return;
         }
         if (broken) {
-            p.sendMessage(rmc.rt.translatable("command.trigger.broken"));
+            p.sendMessage(rmc.rt.translatable("command.token.broken"));
             return;
         }
 
         de.itsgraphax.rmc5.token.Token token = rmc.tokenManager.tokenFromId(id);
 
         if (token.onCooldown(p)) {
-            p.sendMessage(rmc.rt.translatable("command.trigger.onCooldown"));
+            p.sendMessage(rmc.rt.translatable("command.token.onCooldown"));
             return;
         }
 

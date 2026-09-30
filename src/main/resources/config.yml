@@ -56,7 +56,7 @@ tokens:
     lift: 0.5
   CRAB:
     cooldown: 1
-    maxCrafts: 3
+    maxCrafts: 5
 
     # Passive
     rangeMultiplier: 0.7
@@ -145,8 +145,3 @@ events:
 
     # The killed/popped player gets a reduction of bounty * multiplier
     killedReductionMultiplier: 0.5
-
-titles:
-  traderSpawned: "<light_blue>A Wandering Trader has appeared!"
-subtitles:
-  traderSpawned: "Find him at /spawn"

@@ -113,7 +113,7 @@ public class PdcData extends PdcDataBase {
         return pdc(p).getOrDefault(ns.pdcRareCrafts(), PersistentDataType.INTEGER, 0);
     }
     public void setRareCrafts(@NotNull Player p, int val) {
-        pdc(p).getOrDefault(ns.pdcRareCrafts(), PersistentDataType.INTEGER, val);
+        pdc(p).set(ns.pdcRareCrafts(), PersistentDataType.INTEGER, val);
     }
 
     public int getSmelterOverheating(@NotNull Player p) {

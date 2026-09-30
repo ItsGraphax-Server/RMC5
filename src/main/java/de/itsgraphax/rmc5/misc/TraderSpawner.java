@@ -57,8 +57,8 @@ public class TraderSpawner {
 
         Audience audience = Audience.audience(Bukkit.getOnlinePlayers());
         audience.showTitle(Title.title(
-                rmc.rt.translatable("titles.traderSpawned"),
-                rmc.rt.translatable("subtitles.traderSpawned")
+                rmc.rt.translatable("trader.onspawn.title"),
+                rmc.rt.translatable("trader.onspawn.subtitle")
         ));
         audience.playSound(Sound.sound(Key.key("totem_of_undying"), Sound.Source.MASTER, 1f, 1f), Sound.Emitter.self());
 

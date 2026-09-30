@@ -24,7 +24,7 @@ dependencies {
     compileOnly("net.strokkur.commands:annotations-paper:2.1.4")
     annotationProcessor("net.strokkur.commands:processor-paper:2.1.4")
 
-    implementation("de.itsgraphax:GrphxLib:4.1.4")
+    implementation("de.itsgraphax:GrphxLib:5.1.0")
 
     compileOnly("com.github.ItsGraphax-Server:FusionCore:d5e09196c6")
 }

@@ -23,7 +23,7 @@ public class CrabToken extends Token {
     @Override
     public void reloadConfig() {
         super.reloadConfig();
-        mod = new AttributeModifier(rmc.namespaces().crabModifier(),
+        mod = new AttributeModifier(rmc.ns().crabModifier(),
                 config.getDouble("rangeMultiplier"), AttributeModifier.Operation.MULTIPLY_SCALAR_1);
     }
 

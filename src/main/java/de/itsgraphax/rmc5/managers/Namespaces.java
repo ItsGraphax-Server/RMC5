@@ -105,14 +105,7 @@ public class Namespaces extends NamespacesBase {
     }
 
     public NamespacedKey pdcRareCrafts() {
-        return key("rareCrafts");
-    }
-
-    public NamespacedKey fontHudOffset20() {
-        return key("hud/offset-20");
-    }
-    public NamespacedKey fontIconOffset20() {
-        return key("hud/offset-20");
+        return key("rare_rafts");
     }
 
     public NamespacedKey smelterOverheating() {

@@ -5,6 +5,6 @@ import de.itsgraphax.rmc5.HasPlugin;
 
 public class GoldenMatter extends Citem implements HasPlugin {
     public GoldenMatter() {
-        super(rmc.namespaces().itemGoldenMatter());
+        super(rmc.ns().itemGoldenMatter());
     }
 }
