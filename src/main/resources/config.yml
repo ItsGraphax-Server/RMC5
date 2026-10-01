@@ -104,8 +104,6 @@ tokens:
     multiplier: 1.5
   VILLAGER:
     cooldown: 1
-
-    # Passive
   HEART:
     cooldown: 240
 
@@ -113,7 +111,7 @@ tokens:
     heartMod: 10
 
     # Active
-    resistanceTime: 30
+    duration: 30
     resistanceAmplifier: 2
   WATER:
     cooldown: 180

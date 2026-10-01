@@ -1,13 +1,11 @@
 package de.itsgraphax.rmc5.token.smelter;
 
+import de.itsgraphax.rmc5.misc.Utils;
 import de.itsgraphax.rmc5.token.Token;
 import de.itsgraphax.rmc5.token.TokenIdentifier;
 import de.itsgraphax.rmc5.token.TokenRarity;
 import io.papermc.paper.block.TileStateInventoryHolder;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Furnace;
 import org.bukkit.enchantments.Enchantment;
@@ -30,10 +28,15 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Iterator;
 import java.util.List;
 
+import static de.itsgraphax.rmc5.RmcPlugin.rmc;
+
 public class SmelterToken extends Token {
+    protected static final PotionEffect strength = new PotionEffect(PotionEffectType.STRENGTH, 5, 2);
+
     public SmelterToken() {
         super(TokenIdentifier.SMELTER, TokenRarity.RARE);
     }
+
 
     private @Nullable ItemStack getFirstApplicableRecipeResult(ItemStack item) {
         ItemStack result = null;
@@ -132,41 +135,21 @@ public class SmelterToken extends Token {
 
 
     @Override
-    public void onJoin(Player p) {
-        if (rmc.pdc().getSmelterOverheating(p) > 0) {
-            p.removePotionEffect(PotionEffectType.STRENGTH);
-            rmc.pdc().setSmelterOverheating(p, 0);
+    public void onActiveTick(Player p) {
+        p.setFoodLevel(6);
+        p.addPotionEffect(strength);
+        if (rmc.getServer().getCurrentTick() % 5 == 0) {
+            Utils.circleParticles(p.getLocation(), 1, 0.5f, Particle.DUST, new Particle.DustOptions(Color.ORANGE, 1));
         }
     }
 
     @Override
-    public void onTick(Player p) {
-        if (rmc.pdc().getSmelterOverheating(p) > 0) p.setFoodLevel(6);
-    }
-
-    @Override
     public void onTrigger(Player p) {
-        int duration = config.getInt("duration") * 20;
-
-        p.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, duration, 2));
-        rmc.pdc().setSmelterOverheating(p, 1);
-        rmc.getServer().getScheduler().runTaskLater(rmc,
-                () -> rmc.pdc().setSmelterOverheating(p, 0),
-                duration);
-
         p.getWorld().playSound(
                 p.getLocation(),
                 Sound.ENTITY_GHAST_SCREAM,
                 1, 1
         );
         particles(p.getLocation());
-    }
-
-    @Override
-    public void onUnequip(Player p) {
-        if (rmc.pdc().getSmelterOverheating(p) > 0) {
-            p.removePotionEffect(PotionEffectType.STRENGTH);
-            rmc.pdc().setSmelterOverheating(p, 0);
-        }
     }
 }

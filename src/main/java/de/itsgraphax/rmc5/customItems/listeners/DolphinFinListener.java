@@ -12,6 +12,7 @@ public class DolphinFinListener implements Listener {
     void onDolphinDeath(EntityDeathEvent e) {
         if (e.getEntityType() != EntityType.DOLPHIN) return;
 
+        //noinspection DataFlowIssue
         e.getDrops().add(rmc.cim.get(rmc.ns.itemDolphinFin()).createItem());
     }
 }

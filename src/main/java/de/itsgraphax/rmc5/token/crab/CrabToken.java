@@ -1,6 +1,5 @@
 package de.itsgraphax.rmc5.token.crab;
 
-import de.itsgraphax.rmc5.misc.Utils;
 import de.itsgraphax.rmc5.token.Token;
 import de.itsgraphax.rmc5.token.TokenIdentifier;
 import de.itsgraphax.rmc5.token.TokenRarity;
@@ -13,6 +12,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 
+import static de.itsgraphax.rmc5.RmcPlugin.rmc;
+
 public class CrabToken extends Token {
     private AttributeModifier mod;
 
@@ -23,7 +24,7 @@ public class CrabToken extends Token {
     @Override
     public void reloadConfig() {
         super.reloadConfig();
-        mod = new AttributeModifier(rmc.ns().crabModifier(),
+        mod = new AttributeModifier(rmc.ns.crabModifier(),
                 config.getDouble("rangeMultiplier"), AttributeModifier.Operation.MULTIPLY_SCALAR_1);
     }
 
@@ -51,9 +52,8 @@ public class CrabToken extends Token {
 
     @Override
     public void onTrigger(Player p) {
-        Utils.getOnlineAudience().playSound(Sound.sound(Key.key("block.enderchest.open"),
-                Sound.Source.MASTER, 0.75f, 1.0f), p);
-
+        p.getWorld().playSound(Sound.sound(Key.key("block.enderchest.open"),
+                Sound.Source.MASTER, 1f, 1f), p);
         p.openInventory(p.getEnderChest());
     }
 }

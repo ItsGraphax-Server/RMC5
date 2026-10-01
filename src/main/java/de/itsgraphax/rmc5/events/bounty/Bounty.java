@@ -9,6 +9,8 @@ import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.Repairable;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.Statistic;
@@ -244,6 +246,8 @@ public class Bounty extends Event {
         Utils.sendSourcePrefixedMessage("misc/bounty",
                 rmc.rt.parse("<yellow>{{KILLER}} has claimed {{KILLED}}'s bounty of {{BOUNTY}}!")
         );
+        killed.getWorld().playSound(Sound.sound(Key.key("ambient.weather.thunder"),
+                Sound.Source.MASTER, 2, 1), killed);
 
         updateTablistName(killed);
     }

@@ -42,7 +42,7 @@ public class Token {
             return;
         }
 
-        token.onTrigger(p);
+        token.callOnTrigger(p);
 
         rmc.pdc.setLastUse(p, id, LocalDateTime.now());
     }

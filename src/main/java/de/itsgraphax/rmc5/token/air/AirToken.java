@@ -4,10 +4,11 @@ import de.itsgraphax.rmc5.misc.Utils;
 import de.itsgraphax.rmc5.token.Token;
 import de.itsgraphax.rmc5.token.TokenIdentifier;
 import de.itsgraphax.rmc5.token.TokenRarity;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.sound.Sound;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
-import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.attribute.AttributeModifier;
@@ -18,6 +19,8 @@ import org.bukkit.util.Vector;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+
+import static de.itsgraphax.rmc5.RmcPlugin.rmc;
 
 public class AirToken extends Token {
     private static final Map<UUID, Float> lastFallDistance = new HashMap<>();
@@ -43,7 +46,7 @@ public class AirToken extends Token {
         att.removeModifier(mod);
     }
 
-    private void particles(Location loc, float spacing) {
+    private void particles(Location loc) {
         Utils.circleParticles(loc, 1f, 0.5f,
                 Particle.DUST, new Particle.DustOptions(Color.WHITE, 2f));
     }
@@ -55,7 +58,7 @@ public class AirToken extends Token {
         // When falling more than 3 blocks
         if (p.getFallDistance() == 0 &&
                 lastFallDistance.getOrDefault(uuid, 0F) > 3) {
-            particles(p.getLocation(), 1);
+            particles(p.getLocation());
         }
 
         lastFallDistance.put(uuid, p.getFallDistance());
@@ -74,7 +77,10 @@ public class AirToken extends Token {
         dir.add(new Vector(0, config.getDouble("lift"), 0));
         p.setVelocity(dir);
 
-        p.getWorld().playSound(p.getLocation(), Sound.ENTITY_BREEZE_SHOOT, 1, 1);
-        particles(p.getLocation(), 0.3f);
+        p.getWorld().playSound(Sound.sound(Key.key("entity.breeze.shoot"),
+                Sound.Source.MASTER,
+                1, 1),
+                p);
+        particles(p.getLocation());
     }
 }

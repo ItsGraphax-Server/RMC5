@@ -15,6 +15,7 @@ public class AdvancementListener implements Listener {
 
         if (display.frame() != AdvancementDisplay.Frame.CHALLENGE) return;
 
+        //noinspection DataFlowIssue
         e.getPlayer().give(rmc.cim
                 .get(rmc.ns.itemNoxiumIngot())
                 .createItem()
