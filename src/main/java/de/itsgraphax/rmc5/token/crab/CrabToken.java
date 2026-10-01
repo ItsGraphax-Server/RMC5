@@ -3,7 +3,6 @@ package de.itsgraphax.rmc5.token.crab;
 import de.itsgraphax.rmc5.token.Token;
 import de.itsgraphax.rmc5.token.TokenIdentifier;
 import de.itsgraphax.rmc5.token.TokenRarity;
-import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
@@ -53,7 +52,7 @@ public class CrabToken extends Token {
 
     @Override
     public void onTrigger(Player p) {
-        p.getWorld().playSound(Sound.sound(new NamespacedKey("minecraft", "block.enderchest.open"),
+        p.getWorld().playSound(Sound.sound(new NamespacedKey("minecraft", "block.ender_chest.open"),
                 Sound.Source.MASTER, 1f, 1f), p);
         p.openInventory(p.getEnderChest());
     }

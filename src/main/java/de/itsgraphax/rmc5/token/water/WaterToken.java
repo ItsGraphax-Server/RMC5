@@ -4,7 +4,6 @@ import de.itsgraphax.rmc5.misc.Utils;
 import de.itsgraphax.rmc5.token.Token;
 import de.itsgraphax.rmc5.token.TokenIdentifier;
 import de.itsgraphax.rmc5.token.TokenRarity;
-import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -87,7 +86,7 @@ public class WaterToken extends Token {
 
     @Override
     public void onTrigger(Player p) {
-        p.getWorld().playSound(Sound.sound(new NamespacedKey("minecraft", "entity.minecart.inside_underwater"),
+        p.getWorld().playSound(Sound.sound(new NamespacedKey("minecraft", "entity.minecart.inside.underwater"),
                 Sound.Source.MASTER, 1, 1), p);
     }
 }
