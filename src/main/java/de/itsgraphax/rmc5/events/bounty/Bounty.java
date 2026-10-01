@@ -13,6 +13,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -246,7 +247,7 @@ public class Bounty extends Event {
         Utils.sendSourcePrefixedMessage("misc/bounty",
                 rmc.rt.parse("<yellow>{{KILLER}} has claimed {{KILLED}}'s bounty of {{BOUNTY}}!")
         );
-        killed.getWorld().playSound(Sound.sound(Key.key("ambient.weather.thunder"),
+        killed.getWorld().playSound(Sound.sound(new NamespacedKey("minecraft", "entity.lightning_bolt.thunder"),
                 Sound.Source.MASTER, 2, 1), killed);
 
         updateTablistName(killed);

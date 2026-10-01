@@ -7,6 +7,7 @@ import de.itsgraphax.rmc5.token.TokenRarity;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import org.bukkit.Color;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -68,7 +69,7 @@ public class HeartToken extends Token {
     void onAttack(EntityDamageByEntityEvent e) {
         if (!(e.getEntity() instanceof Player p)) return;
         if (isActive(p)) {
-            p.getWorld().playSound(Sound.sound(Key.key("sounds.random.anvil_land"),
+            p.getWorld().playSound(Sound.sound(new NamespacedKey("minecraft", "block.anvil.land"),
                     Sound.Source.MASTER, 0.4f, 1.0f), p);
         }
     }

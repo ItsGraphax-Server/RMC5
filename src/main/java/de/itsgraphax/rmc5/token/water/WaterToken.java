@@ -8,6 +8,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -45,9 +46,9 @@ public class WaterToken extends Token {
         Location center = p.getLocation();
         double strength = config.getDouble("strength", 0.8);
 
-        if (rmc.getServer().getCurrentTick() % 40 == 0) {
+        if (rmc.getServer().getCurrentTick() % 20 == 0) {
             center.getWorld().playSound(Sound.sound(
-                    Key.key("entity.guardian.elder_idle"),
+                    new NamespacedKey("minecraft", "entity.elder_guardian.idle"),
                     Sound.Source.MASTER,
                     1f, 1f
             ), p);
@@ -86,7 +87,7 @@ public class WaterToken extends Token {
 
     @Override
     public void onTrigger(Player p) {
-        p.getWorld().playSound(Sound.sound(Key.key("sounds.minecart.inside_underwater"),
+        p.getWorld().playSound(Sound.sound(new NamespacedKey("minecraft", "entity.minecart.inside_underwater"),
                 Sound.Source.MASTER, 1, 1), p);
     }
 }

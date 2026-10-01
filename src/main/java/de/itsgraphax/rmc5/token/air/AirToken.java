@@ -8,6 +8,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -77,7 +78,7 @@ public class AirToken extends Token {
         dir.add(new Vector(0, config.getDouble("lift"), 0));
         p.setVelocity(dir);
 
-        p.getWorld().playSound(Sound.sound(Key.key("entity.breeze.shoot"),
+        p.getWorld().playSound(Sound.sound(new NamespacedKey("minecraft", "entity.breeze.shoot"),
                 Sound.Source.MASTER,
                 1, 1),
                 p);
