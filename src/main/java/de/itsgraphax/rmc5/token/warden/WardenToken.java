@@ -3,18 +3,22 @@ package de.itsgraphax.rmc5.token.warden;
 import de.itsgraphax.rmc5.token.Token;
 import de.itsgraphax.rmc5.token.TokenIdentifier;
 import de.itsgraphax.rmc5.token.TokenRarity;
+import de.itsgraphax.rmc5.token.TokenTriggerEvent;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityPortalEnterEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -24,7 +28,9 @@ import java.util.Set;
 
 public class WardenToken extends Token {
     private final ArenaWorldManager worldManager = new ArenaWorldManager();
+
     private final Set<Location> placedBlocks = new HashSet<>();
+    private boolean dimensionActive = false;
 
     public WardenToken() {
         super(TokenIdentifier.WARDEN, TokenRarity.EPIC);
@@ -43,17 +49,25 @@ public class WardenToken extends Token {
     }
 
     @Override
-    public void onTrigger(Player p) {
-        p.getLocation().getNearbyLivingEntities(config.getInt("radius")).forEach(e -> {
-            Location locCopy = e.getLocation().clone();
+    public void onTrigger(TokenTriggerEvent event) {
+        if (dimensionActive) {
+            event.setCancelled(true);
+            return;
+        }
+        Player p = event.getPlayer();
+        Location triggererPos = p.getLocation();
+
+        dimensionActive = true;
+        p.getLocation().getNearbyLivingEntities(config.getInt("radius")).forEach(entity -> {
+            Location locCopy = entity.getLocation().clone();
 
             // Teleport to arena
-            e.teleport(worldManager.getSpawn(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+            entity.teleport(worldManager.getSpawn(), PlayerTeleportEvent.TeleportCause.PLUGIN);
             // Apply Darkness
-            e.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, config.getInt("activeDuration", 10) * 20, 0));
+            entity.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, config.getInt("activeDuration", 10) * 20, 0));
 
             // Teleport entity back to old location after activeDuration seconds
-            rmc.getServer().getScheduler().runTaskLater(rmc, () -> e.teleport(locCopy, PlayerTeleportEvent.TeleportCause.PLUGIN), config.getLong("activeDuration", 10) * 20);
+            rmc.getServer().getScheduler().runTaskLater(rmc, () -> entity.teleport(locCopy, PlayerTeleportEvent.TeleportCause.PLUGIN), config.getLong("activeDuration", 10) * 20);
         });
 
         p.removePotionEffect(PotionEffectType.DARKNESS);
@@ -62,15 +76,31 @@ public class WardenToken extends Token {
                 Sound.ENTITY_CREAKING_UNFREEZE, 2, 1);
 
         rmc.getServer().sendMessage(rmc.rt().parse("<black><italic><bold>DOMAIN EXPANSION ABYSSAL VOID"));
+
+        rmc.getServer().getScheduler().runTaskLater(rmc, () -> {
+            this.dimensionActive = false;
+            worldManager.getEntities().forEach(entity -> entity.teleport(triggererPos));
+        }, config.getLong("activeDuration", 10) * 20 + 1); // one tick later!
     }
 
     @EventHandler
     void onBlockPlace(BlockPlaceEvent e) {
-        Block block = e.getBlock();
+        if (e.getPlayer().getGameMode() == GameMode.CREATIVE) return;
+        onGeneralBlockPlace(e.getBlock());
+    }
+
+    @EventHandler
+    void onFallBlock(final EntityChangeBlockEvent e) {
+        if (!(e.getEntity() instanceof FallingBlock)) return;
+        if (e.getTo() != Material.SAND && e.getTo() != Material.GRAVEL && e.getTo() != Material.ANVIL) return;
+
+        onGeneralBlockPlace(e.getBlock());
+    }
+
+    private void onGeneralBlockPlace(Block block) {
         Location loc = block.getLocation();
 
         if (!worldManager.isInWorld(loc)) return;
-        if (e.getPlayer().getGameMode() == GameMode.CREATIVE) return;
 
         placedBlocks.add(loc);
 
@@ -113,5 +143,14 @@ public class WardenToken extends Token {
     @EventHandler
     void onBlockExplode(BlockExplodeEvent e) {
         if (worldManager.isInWorld(e.getBlock().getLocation())) e.setCancelled(true);
+    }
+
+
+    @EventHandler
+    void onPlayerMove(PlayerMoveEvent event) {
+        if (!worldManager.isInWorld(event.getPlayer().getLocation())) return;
+        if (dimensionActive) return;
+        event.getPlayer().teleport(rmc.getServer().getRespawnWorld().getSpawnLocation());
+        event.getPlayer().kick(rmc.rt.parse("<red>VULCAN: UNFAIR ADVANTAGE")); // just for fun :)))))))
     }
 }
