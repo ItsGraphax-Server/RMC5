@@ -9,6 +9,7 @@ import de.itsgraphax.rmc5.token.fire.FireToken;
 import de.itsgraphax.rmc5.token.potion.PotionToken;
 import de.itsgraphax.rmc5.token.smelter.SmelterToken;
 import de.itsgraphax.rmc5.token.unknown.UnknownToken;
+import de.itsgraphax.rmc5.token.water.WaterToken;
 
 import java.util.Arrays;
 import java.util.Set;
@@ -24,7 +25,8 @@ public enum TokenIdentifier {
     CRAB(CrabToken::new),
     VILLAGER(VillagerToken::new),
     HEART(HeartToken::new),
-    POTION(PotionToken::new);
+    POTION(PotionToken::new),
+    WATER(WaterToken::new);
 
     private final Supplier<Token> factory;
 

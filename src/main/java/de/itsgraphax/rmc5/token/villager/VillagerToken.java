@@ -8,16 +8,15 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class VillagerToken extends Token {
+    static PotionEffect heroOfTheVillage = new PotionEffect(
+            PotionEffectType.HERO_OF_THE_VILLAGE, 20, 4, true);
+
     public VillagerToken() {
         super(TokenIdentifier.VILLAGER, TokenRarity.LEGENDARY);
     }
 
     @Override
     public void onTick(Player p) {
-        p.addPotionEffect(new PotionEffect(
-                PotionEffectType.HERO_OF_THE_VILLAGE,
-                20,
-                4,
-                false));
+        p.addPotionEffect(heroOfTheVillage);
     }
 }

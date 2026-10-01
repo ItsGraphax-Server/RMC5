@@ -17,5 +17,6 @@ public class RecipeManager {
         AirTokenRecipe.register();
         FireTokenRecipe.register();
         CrabTokenRecipe.register();
+        WaterTokenRecipe.register();
     }
 }

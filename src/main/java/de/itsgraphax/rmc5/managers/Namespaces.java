@@ -31,6 +31,9 @@ public class Namespaces extends NamespacesBase {
     public NamespacedKey itemRepairer() {
         return key("repairer");
     }
+    public NamespacedKey itemDolphinFin() {
+        return key("dolphin_fin");
+    }
 
     public NamespacedKey recipeNoxiomIngotToNugget() {
         return key("noxium_ingot_to_nugget");
@@ -61,6 +64,9 @@ public class Namespaces extends NamespacesBase {
     }
     public NamespacedKey recipeAirToken() {
         return key("air_token");
+    }
+    public NamespacedKey recipeWaterToken() {
+        return key("water_token");
     }
     public NamespacedKey recipeFireToken() {
         return key("fire_token");

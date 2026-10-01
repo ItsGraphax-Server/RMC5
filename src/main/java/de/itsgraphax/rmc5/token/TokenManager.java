@@ -11,14 +11,16 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TokenManager implements HasPlugin {
+import static de.itsgraphax.rmc5.RmcPlugin.rmc;
+
+public class TokenManager {
     private final Map<TokenIdentifier, Token> idTokenMap = new HashMap<>();
 
     public TokenManager() {
         for (TokenIdentifier id : TokenIdentifier.values()) {
             Token instance = id.factory().get();
             idTokenMap.put(id, instance);
-            rmc.cim().register(instance);
+            rmc.cim.register(instance);
         }
     }
 
@@ -30,7 +32,7 @@ public class TokenManager implements HasPlugin {
 
     public void reset(Player p) {
         for (TokenIdentifier id : idTokenMap.keySet()) {
-            rmc.pdc().resetLastUse(p, id);
+            rmc.pdc.resetLastUse(p, id);
         }
     }
 
@@ -39,7 +41,7 @@ public class TokenManager implements HasPlugin {
     }
 
     public @NotNull Token tokenFromItem(@NotNull ItemStack item) {
-        return tokenFromId(rmc.pdc().getItemToken(item));
+        return tokenFromId(rmc.pdc.getItemToken(item));
     }
 
     public @NotNull Collection<Token> allTokens() {
@@ -49,8 +51,8 @@ public class TokenManager implements HasPlugin {
     public void tick() {
         for (Player p : rmc.getServer().getOnlinePlayers()) { // iterate over players
             for (int slot = 0; slot < 2; slot++) { // iterate over slots
-                TokenIdentifier id = rmc.pdc().getEquippedToken(p, slot);
-                boolean broken = rmc.pdc().getEquippedBroken(p, slot);
+                TokenIdentifier id = rmc.pdc.getEquippedToken(p, slot);
+                boolean broken = rmc.pdc.getEquippedBroken(p, slot);
                 if (id == TokenIdentifier.UNKNOWN || broken) continue;
                 tokenFromId(id).onTick(p);
             }
@@ -58,10 +60,10 @@ public class TokenManager implements HasPlugin {
     }
 
     public Component renderTokenUi(Player p) {
-        Token token0 = tokenFromId(rmc.pdc().getEquippedToken(p, 0));
-        Token token1 = tokenFromId(rmc.pdc().getEquippedToken(p, 1));
+        Token token0 = tokenFromId(rmc.pdc.getEquippedToken(p, 0));
+        Token token1 = tokenFromId(rmc.pdc.getEquippedToken(p, 1));
         return
-                rmc.rt().parse("{{COOLDOWN0}} <sprite:{{ICON0}}> <sprite:{{ICON1}}> {{COOLDOWN1}}",
+                rmc.rt.parse("{{COOLDOWN0}} <sprite:{{ICON0}}> <sprite:{{ICON1}}> {{COOLDOWN1}}",
                         "ICON0", token0.getSprite(p, 0),
                         "ICON1", token1.getSprite(p, 1),
                         "COOLDOWN0", token0.getCooldownString(p),
@@ -69,7 +71,7 @@ public class TokenManager implements HasPlugin {
     }
 
     public UnequipResult unequipToken(@NotNull Player p, int slot) {
-        PdcData pdcData = rmc.pdc();
+        PdcData pdcData = rmc.pdc;
 
         TokenIdentifier id = pdcData.getEquippedToken(p, slot);
         if (id == TokenIdentifier.UNKNOWN) return UnequipResult.NO_TOKEN;

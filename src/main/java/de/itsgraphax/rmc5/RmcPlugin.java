@@ -10,6 +10,7 @@ import de.itsgraphax.rmc5.commands.TokenBrigadier;
 import de.itsgraphax.rmc5.commands.UnequipBrigadier;
 import de.itsgraphax.rmc5.customItems.*;
 import de.itsgraphax.rmc5.customItems.listeners.AdvancementListener;
+import de.itsgraphax.rmc5.customItems.listeners.DolphinFinListener;
 import de.itsgraphax.rmc5.customItems.listeners.RecipeListener;
 import de.itsgraphax.rmc5.customItems.listeners.WanderingTraderListener;
 import de.itsgraphax.rmc5.customItems.recipes.RecipeManager;
@@ -26,8 +27,6 @@ import de.itsgraphax.rmc5.token.TokenListener;
 import de.itsgraphax.rmc5.token.TokenManager;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.UUID;
 
 public final class RmcPlugin extends JavaPlugin {
     public static RmcPlugin rmc;
@@ -64,6 +63,7 @@ public final class RmcPlugin extends JavaPlugin {
         cim.register(new DarkMatter());
         cim.register(new GoldenMatter());
         cim.register(new Repairer());
+        cim.register(new DolphinFin());
         RecipeManager.registerRecipe();
 
         saveDefaultConfig();
@@ -77,7 +77,8 @@ public final class RmcPlugin extends JavaPlugin {
                 new DisableFireAspectListener(),
                 new NoMaceEnchantListener(),
                 new Cure4AllListener(),
-                new ResourcepackSender("rmc5", "1.0.0")
+                new DolphinFinListener(),
+                new ResourcepackSender("rmc5", "1.1.0")
         );
         OnEnable.registerEvents(this, tokenManager.allTokens());
         OnEnable.registerCommands(this,

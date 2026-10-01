@@ -115,6 +115,13 @@ tokens:
     # Active
     resistanceTime: 30
     resistanceAmplifier: 2
+  WATER:
+    cooldown: 180
+
+    # Active
+    duration: 10
+    radius: 4.0
+    strength: 0.82
 
 trader:
   min: 60
