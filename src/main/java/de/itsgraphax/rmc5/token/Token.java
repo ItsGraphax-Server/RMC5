@@ -1,4 +1,5 @@
 package de.itsgraphax.rmc5.token;
+
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityStatus;
 import de.itsgraphax.grphxLib.citems.Citem;
@@ -69,7 +70,7 @@ public abstract class Token extends Citem implements HasPlugin, Listener {
     private void playTotemAnim(Player p, boolean broken) {
         WrapperPlayServerEntityStatus packet = new WrapperPlayServerEntityStatus(
                 p.getEntityId(), 35
-                );
+        );
 
         PlayerInventory pinv = p.getInventory();
         ItemStack hand = pinv.getItemInMainHand();
@@ -108,7 +109,11 @@ public abstract class Token extends Citem implements HasPlugin, Listener {
     public void onTick(Player p) {
     }
 
+    @Deprecated
     public void onTrigger(Player p) {
+    }
+
+    public void onTrigger(TokenTriggerEvent e) {
     }
 
     public void onJoin(Player p) {

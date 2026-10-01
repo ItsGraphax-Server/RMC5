@@ -1,6 +1,7 @@
 package de.itsgraphax.rmc5.commands;
 
 import de.itsgraphax.rmc5.token.TokenIdentifier;
+import de.itsgraphax.rmc5.token.TokenTriggerEvent;
 import net.strokkur.commands.Command;
 import net.strokkur.commands.Executes;
 import net.strokkur.commands.paper.Description;
@@ -18,12 +19,13 @@ public class Token {
     void triggerLeft(@Executor Player p) {
         trigger(p, 0);
     }
+
     @Executes("right")
     void triggerRight(@Executor Player p) {
         trigger(p, 1);
     }
 
-    void trigger(Player p, int slot) {
+    final void trigger(Player p, int slot) {
         TokenIdentifier id = rmc.pdc.getEquippedToken(p, slot);
         boolean broken = rmc.pdc.getEquippedBroken(p, slot);
         if (id == TokenIdentifier.UNKNOWN) {
@@ -42,7 +44,11 @@ public class Token {
             return;
         }
 
-        token.onTrigger(p);
+        TokenTriggerEvent e = new TokenTriggerEvent(p);
+        token.onTrigger(e);
+        token.onTrigger(p); //TODO in https://github.com/ItsGraphax-Server/RMC5/issues/9
+
+        if (e.isCancelled()) return;
 
         rmc.pdc.setLastUse(p, id, LocalDateTime.now());
     }

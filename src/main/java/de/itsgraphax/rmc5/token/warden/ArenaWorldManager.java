@@ -1,6 +1,9 @@
 package de.itsgraphax.rmc5.token.warden;
 
 import org.bukkit.*;
+import org.bukkit.entity.Entity;
+
+import java.util.List;
 
 public class ArenaWorldManager {
     private static final String WORLD_NAME = "combat_arena";
@@ -47,6 +50,10 @@ public class ArenaWorldManager {
 
     public Location getSpawn() {
         return new Location(arenaWorld, 0, 0, 0);
+    }
+
+    public List<Entity> getEntities() {
+        return arenaWorld.getEntities();
     }
 
     public boolean isInWorld(Location l) {
