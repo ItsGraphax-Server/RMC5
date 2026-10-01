@@ -88,11 +88,11 @@ public class PdcData extends PdcDataBase {
     public void setBountyLastUpdateCycle(@NotNull Player p, int val) {
         pdc(p).set(ns.pdcBountyLastUpdateCycle(), PersistentDataType.INTEGER, val);
     }
-    public int getBountyLastClaimedCycle(@NotNull Player p) {
-        return pdc(p).getOrDefault(ns.pdcBountyLastClaimedCycle(), PersistentDataType.INTEGER, -1);
+    public int getBountyClaims(@NotNull Player p) {
+        return pdc(p).getOrDefault(ns.pdcBountyClaims(), PersistentDataType.INTEGER, -1);
     }
-    public void setBountyLastClaimedCycle(@NotNull Player p, int val) {
-        pdc(p).set(ns.pdcBountyLastClaimedCycle(), PersistentDataType.INTEGER, val);
+    public void setBountyClaims(@NotNull Player p, int val) {
+        pdc(p).set(ns.pdcBountyClaims(), PersistentDataType.INTEGER, val);
     }
 
     public boolean getItemBroken(@NotNull ItemStack item) {

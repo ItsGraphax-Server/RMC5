@@ -96,8 +96,8 @@ public class Namespaces extends NamespacesBase {
     public NamespacedKey pdcBountyBounty() {
         return key("bounty.bounty");
     }
-    public NamespacedKey pdcBountyLastClaimedCycle() {
-        return key("bounty.lastclaimedcycle");
+    public NamespacedKey pdcBountyClaims() {
+        return key("bounty.claims");
     }
     public NamespacedKey pdcBountyLastUpdateCycle() {
         return key("bounty.lastUpdateCycle");

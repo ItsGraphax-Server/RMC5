@@ -152,3 +152,6 @@ events:
 
     # The killed/popped player gets a reduction of bounty * multiplier
     killedReductionMultiplier: 0.5
+
+    # The max amount of bounties a player can claim
+    maxClaims: 1

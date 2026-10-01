@@ -4,6 +4,7 @@ import de.itsgraphax.fusion.engine.text.positionedText.ComponentWidth;
 import de.itsgraphax.fusion.engine.text.positionedText.Offset;
 import de.itsgraphax.rmc5.events.Event;
 import de.itsgraphax.rmc5.events.EventIdentifier;
+import de.itsgraphax.rmc5.misc.Utils;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.Repairable;
 import io.papermc.paper.registry.RegistryAccess;
@@ -125,6 +126,7 @@ public class Bounty extends Event {
         if (currentCycle == null || currentCycle.equals(playerCycle)) return;
 
         rmc.pdc.setBountyBounty(p, BountyCalculation.calculateRandomizedBounty(p));
+        rmc.pdc.setBountyClaims(p, 0);
         rmc.pdc.setBountyLastUpdateCycle(p, currentCycle);
         updateTablistName(p);
     }
@@ -165,6 +167,7 @@ public class Bounty extends Event {
         }
     }
 
+
     @EventHandler
     void onJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
@@ -193,31 +196,38 @@ public class Bounty extends Event {
         // get killer
         Player killer = damagedToLastDamager.get(killed);
         if (killer == null) {
-            rmc.getServer().sendMessage(rmc.rt.parse("<red>No player could be found to be the last attacker of {{PLAYER}}.",
+
+            Utils.sendSourcePrefixedMessage("misc/bounty", rmc.rt.parse("<red>No player could be found to be the last attacker of {{PLAYER}}.",
                     "PLAYER", killed.getName()));
             return;
+
         }
         if (killed == killer) {
-            rmc.getServer().sendMessage(rmc.rt.parse("<red>{{PLAYER}} has just tried to claim their own bounty 💀",
+
+            Utils.sendSourcePrefixedMessage("misc/bounty", rmc.rt.parse("<red>{{PLAYER}} has just tried to claim their own bounty 💀",
                     "PLAYER", killed.getName()));
             return;
+
         }
 
-        int currentCycle = rmc.data.getBountyCycle();
-        if (rmc.pdc.getBountyLastClaimedCycle(killer) == currentCycle) {
-            rmc.getServer().sendMessage(rmc.rt.parse("<orange>{{KILLER}} could not claim {{KILLED}}'s bounty due to already claiming bounty",
+        int bountyClaims = rmc.pdc.getBountyClaims(killer);
+        if (bountyClaims >= config.getInt("maxClaims", 3)) {
+
+            Utils.sendSourcePrefixedMessage("misc/bounty", rmc.rt.parse("<red>{{KILLER}} could not claim {{KILLED}}'s bounty due to already having claimed a bounty.",
                     "KILLER", killer.getName(),
                     "KILLED", killed.getName()));
             return;
+
         }
-        rmc.pdc.setBountyLastClaimedCycle(killer, currentCycle);
+        rmc.pdc.setBountyClaims(killer, bountyClaims + 1);
 
         // activate totem
         if (!e.isCancelled()) { // player has a totem if not cancelled
             EquipmentSlot hand = e.getHand();
             assert hand != null;
             killed.getInventory().setItem(hand, ItemStack.of(Material.TOTEM_OF_UNDYING));
-        } else {
+        }
+        else {
             e.setCancelled(false);
         }
 
@@ -230,6 +240,10 @@ public class Bounty extends Event {
 
         int oldKilledCoins = rmc.pdc.getBountyCoins(killed);
         rmc.pdc.setBountyCoins(killed, oldKilledCoins - bounty / 2);
+
+        Utils.sendSourcePrefixedMessage("misc/bounty",
+                rmc.rt.parse("<yellow>{{KILLER}} has claimed {{KILLED}}'s bounty of {{BOUNTY}}!")
+        );
 
         updateTablistName(killed);
     }
