@@ -68,12 +68,15 @@ public class WardenToken extends Token {
         worldManager.getSpawn().getWorld().playSound(worldManager.getSpawn(),
                 Sound.ENTITY_CREAKING_UNFREEZE, 2, 1);
 
-        rmc.getServer().sendMessage(rmc.rt().parse("<black><italic><bold>DOMAIN EXPANSION ABYSSAL VOID"));
+        rmc.getServer().sendMessage(rmc.rt.parse("<black><italic><bold>DOMAIN EXPANSION ABYSSAL VOID"));
 
         dimensionActive = true;
         rmc.getServer().getScheduler().runTaskLater(rmc, () -> {
             this.dimensionActive = false;
             worldManager.getEntities().forEach(entity -> entity.teleport(triggererPos));
+            placedBlocks.forEach(loc -> loc.getBlock().setType(Material.AIR));
+            placedBlocks.clear();
+
         }, config.getLong("activeDuration", 10) * 20 + 1); // one tick later!
     }
 
@@ -96,11 +99,6 @@ public class WardenToken extends Token {
         if (!worldManager.isInWorld(loc)) return;
 
         placedBlocks.add(loc);
-
-        rmc.getServer().getScheduler().runTaskLater(rmc, () -> {
-            block.setType(Material.AIR);
-            placedBlocks.remove(loc);
-        }, 200);
     }
 
     @EventHandler
@@ -142,6 +140,7 @@ public class WardenToken extends Token {
     @EventHandler
     void onPlayerMove(PlayerMoveEvent event) {
         if (!worldManager.isInWorld(event.getPlayer().getLocation())) return;
+        if (event.getPlayer().getGameMode().equals(GameMode.CREATIVE)) return;
         if (dimensionActive) return;
         event.getPlayer().teleport(rmc.getServer().getRespawnWorld().getSpawnLocation());
         event.getPlayer().kick(rmc.rt.parse("<red>VULCAN: UNFAIR ADVANTAGE")); // just for fun :)))))))
