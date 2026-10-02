@@ -109,11 +109,8 @@ public abstract class Token extends Citem implements HasPlugin, Listener {
     public void onTick(Player p) {
     }
 
-    @Deprecated
-    public void onTrigger(Player p) {
-    }
 
-    public void onTrigger(TokenTriggerEvent e) {
+    public void onTrigger(Player p) {
     }
 
     public void onJoin(Player p) {

@@ -1,7 +1,6 @@
 package de.itsgraphax.rmc5.commands;
 
 import de.itsgraphax.rmc5.token.TokenIdentifier;
-import de.itsgraphax.rmc5.token.TokenTriggerEvent;
 import net.strokkur.commands.Command;
 import net.strokkur.commands.Executes;
 import net.strokkur.commands.paper.Description;
@@ -44,11 +43,7 @@ public class Token {
             return;
         }
 
-        TokenTriggerEvent e = new TokenTriggerEvent(p);
-        token.onTrigger(e);
-        token.onTrigger(p); //TODO in https://github.com/ItsGraphax-Server/RMC5/issues/9
-
-        if (e.isCancelled()) return;
+        token.onTrigger(p);
 
         rmc.pdc.setLastUse(p, id, LocalDateTime.now());
     }

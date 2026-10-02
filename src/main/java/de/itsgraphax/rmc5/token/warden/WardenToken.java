@@ -3,7 +3,6 @@ package de.itsgraphax.rmc5.token.warden;
 import de.itsgraphax.rmc5.token.Token;
 import de.itsgraphax.rmc5.token.TokenIdentifier;
 import de.itsgraphax.rmc5.token.TokenRarity;
-import de.itsgraphax.rmc5.token.TokenTriggerEvent;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.FallingBlock;
@@ -49,25 +48,19 @@ public class WardenToken extends Token {
     }
 
     @Override
-    public void onTrigger(TokenTriggerEvent event) {
-        if (dimensionActive) {
-            event.setCancelled(true);
-            return;
-        }
-        Player p = event.getPlayer();
+    public void onTrigger(Player p) {
         Location triggererPos = p.getLocation();
 
-        dimensionActive = true;
-        p.getLocation().getNearbyLivingEntities(config.getInt("radius")).forEach(entity -> {
-            Location locCopy = entity.getLocation().clone();
+        p.getLocation().getNearbyLivingEntities(config.getInt("radius")).forEach(e -> {
+            Location locCopy = e.getLocation().clone();
 
             // Teleport to arena
-            entity.teleport(worldManager.getSpawn(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+            e.teleport(worldManager.getSpawn(), PlayerTeleportEvent.TeleportCause.PLUGIN);
             // Apply Darkness
-            entity.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, config.getInt("activeDuration", 10) * 20, 0));
+            e.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, config.getInt("activeDuration", 10) * 20, 0));
 
             // Teleport entity back to old location after activeDuration seconds
-            rmc.getServer().getScheduler().runTaskLater(rmc, () -> entity.teleport(locCopy, PlayerTeleportEvent.TeleportCause.PLUGIN), config.getLong("activeDuration", 10) * 20);
+            rmc.getServer().getScheduler().runTaskLater(rmc, () -> e.teleport(locCopy, PlayerTeleportEvent.TeleportCause.PLUGIN), config.getLong("activeDuration", 10) * 20);
         });
 
         p.removePotionEffect(PotionEffectType.DARKNESS);
@@ -77,6 +70,7 @@ public class WardenToken extends Token {
 
         rmc.getServer().sendMessage(rmc.rt().parse("<black><italic><bold>DOMAIN EXPANSION ABYSSAL VOID"));
 
+        dimensionActive = true;
         rmc.getServer().getScheduler().runTaskLater(rmc, () -> {
             this.dimensionActive = false;
             worldManager.getEntities().forEach(entity -> entity.teleport(triggererPos));
@@ -92,7 +86,6 @@ public class WardenToken extends Token {
     @EventHandler
     void onFallBlock(final EntityChangeBlockEvent e) {
         if (!(e.getEntity() instanceof FallingBlock)) return;
-        if (e.getTo() != Material.SAND && e.getTo() != Material.GRAVEL && e.getTo() != Material.ANVIL) return;
 
         onGeneralBlockPlace(e.getBlock());
     }
