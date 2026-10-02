@@ -9,6 +9,8 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
+import static de.itsgraphax.rmc5.RmcPlugin.rmc;
+
 public class FireToken extends Token {
     public FireToken() {
         super(TokenIdentifier.FIRE, TokenRarity.RARE);
@@ -35,6 +37,6 @@ public class FireToken extends Token {
         fireball.setAcceleration(direction.multiply(speed));
         fireball.setYield((float) strength);
 
-        rmc.getServer().sendMessage(rmc.rt().parse("<red><italic><bold>FIREBALL"));
+        rmc.getServer().sendMessage(rmc.rt.parse("<red><italic><bold>FIREBALL"));
     }
 }

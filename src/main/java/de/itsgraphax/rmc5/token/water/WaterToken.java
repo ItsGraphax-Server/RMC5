@@ -4,10 +4,10 @@ import de.itsgraphax.rmc5.misc.Utils;
 import de.itsgraphax.rmc5.token.Token;
 import de.itsgraphax.rmc5.token.TokenIdentifier;
 import de.itsgraphax.rmc5.token.TokenRarity;
-import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -15,18 +15,14 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import static de.itsgraphax.rmc5.RmcPlugin.rmc;
 
 public class WaterToken extends Token {
-    protected Map<UUID, Long> activationTime = new HashMap<>();
-
     protected static double middleRingRadius;
     protected static double topRingRadius;
     protected static double radius;
 
-    static PotionEffect dolphinsGrace = new PotionEffect(PotionEffectType.DOLPHINS_GRACE, 20, 0, true);
+    static final PotionEffect dolphinsGrace = new PotionEffect(PotionEffectType.DOLPHINS_GRACE, 20, 0, true);
 
     public WaterToken() {
         super(TokenIdentifier.WATER, TokenRarity.RARE);
@@ -44,13 +40,14 @@ public class WaterToken extends Token {
         Utils.circleParticles(loc, (float) radius, 1, Particle.DUST, new Particle.DustOptions(Color.BLUE, 1));
     }
 
-    protected void whileActive(Player p) {
+    @Override
+    public void onActiveTick(Player p) {
         Location center = p.getLocation();
         double strength = config.getDouble("strength", 0.8);
 
-        if (rmc.getServer().getCurrentTick() % 40 == 0) {
+        if (rmc.getServer().getCurrentTick() % 20 == 0) {
             center.getWorld().playSound(Sound.sound(
-                    Key.key("entity.guardian.elder_idle"),
+                    new NamespacedKey("minecraft", "entity.elder_guardian.idle"),
                     Sound.Source.MASTER,
                     1f, 1f
             ), p);
@@ -83,18 +80,13 @@ public class WaterToken extends Token {
 
     @Override
     public void onTick(Player p) {
-        // Passive
         p.addPotionEffect(dolphinsGrace);
         p.setRemainingAir(200);
-
-        // Active
-        if (System.currentTimeMillis() - activationTime.getOrDefault(p.getUniqueId(), 0L) < config.getInt("duration") * 1000L) {
-            whileActive(p);
-        }
     }
 
     @Override
     public void onTrigger(Player p) {
-        activationTime.put(p.getUniqueId(), System.currentTimeMillis());
+        p.getWorld().playSound(Sound.sound(new NamespacedKey("minecraft", "entity.minecart.inside.underwater"),
+                Sound.Source.MASTER, 1, 1), p);
     }
 }

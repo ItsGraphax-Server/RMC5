@@ -1,6 +1,5 @@
 package de.itsgraphax.rmc5.token;
 
-import de.itsgraphax.rmc5.HasPlugin;
 import de.itsgraphax.rmc5.managers.PdcData;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
@@ -54,7 +53,7 @@ public class TokenManager {
                 TokenIdentifier id = rmc.pdc.getEquippedToken(p, slot);
                 boolean broken = rmc.pdc.getEquippedBroken(p, slot);
                 if (id == TokenIdentifier.UNKNOWN || broken) continue;
-                tokenFromId(id).onTick(p);
+                tokenFromId(id).callOnTick(p);
             }
         }
     }
@@ -82,7 +81,7 @@ public class TokenManager {
         Token token = tokenFromId(id);
         ItemStack item = token.createItem(broken);
 
-        if (!broken) token.onUnequip(p);
+        if (!broken) token.callOnUnequip(p);
 
         p.give(item);
 

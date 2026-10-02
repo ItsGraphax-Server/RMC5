@@ -1,8 +1,8 @@
 package de.itsgraphax.rmc5.token;
+
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityStatus;
 import de.itsgraphax.grphxLib.citems.Citem;
-import de.itsgraphax.rmc5.HasPlugin;
 import de.itsgraphax.rmc5.managers.PdcData;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import net.kyori.adventure.text.Component;
@@ -11,24 +11,29 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
-public abstract class Token extends Citem implements HasPlugin, Listener {
+import static de.itsgraphax.rmc5.RmcPlugin.rmc;
+
+public abstract class Token extends Citem implements Listener {
+    protected final Map<UUID, Long> activationTime = new HashMap<>();
+
     private final TokenIdentifier id;
     private final TokenRarity rarity;
     protected ConfigurationSection config;
 
     public Token(TokenIdentifier id, TokenRarity rarity) {
-        super(rmc.ns().itemToken(id));
+        super(rmc.ns.itemToken(id));
 
         this.id = id;
         this.rarity = rarity;
@@ -44,7 +49,7 @@ public abstract class Token extends Citem implements HasPlugin, Listener {
         ItemStack item = event.getItem();
         assert item != null;
         Player p = event.getPlayer();
-        PdcData pdcData = rmc.pdc();
+        PdcData pdcData = rmc.pdc;
 
         boolean broken = pdcData.getItemBroken(item);
         int slot = getSlot();
@@ -54,7 +59,7 @@ public abstract class Token extends Citem implements HasPlugin, Listener {
         // Unequip if there is already an equipped token
         TokenIdentifier currentlyEquipped = pdcData.getEquippedToken(p, slot);
         if (currentlyEquipped != TokenIdentifier.UNKNOWN) {
-            rmc.tokenManager().unequipToken(p, slot);
+            rmc.tokenManager.unequipToken(p, slot);
         }
 
         pdcData.setEquippedToken(p, slot, id);
@@ -69,7 +74,7 @@ public abstract class Token extends Citem implements HasPlugin, Listener {
     private void playTotemAnim(Player p, boolean broken) {
         WrapperPlayServerEntityStatus packet = new WrapperPlayServerEntityStatus(
                 p.getEntityId(), 35
-                );
+        );
 
         PlayerInventory pinv = p.getInventory();
         ItemStack hand = pinv.getItemInMainHand();
@@ -86,18 +91,44 @@ public abstract class Token extends Citem implements HasPlugin, Listener {
     public boolean hasWorkingToken(Player p) {
         for (int slot = 0; slot < 2; slot++) { // iterate over all slots
             if (
-                    rmc.pdc().getEquippedToken(p, slot) == id &&
-                            !rmc.pdc().getEquippedBroken(p, slot)
+                    rmc.pdc.getEquippedToken(p, slot) == id &&
+                            !rmc.pdc.getEquippedBroken(p, slot)
             ) return true;
         }
         return false;
     }
 
-    @EventHandler
-    private void onJoinListen(PlayerJoinEvent e) {
-        Player p = e.getPlayer();
-        if (hasWorkingToken(p)) onJoin(p);
+    public boolean isActive(Player p) {
+        return (System.currentTimeMillis() - activationTime.getOrDefault(p.getUniqueId(), 0L)) <
+                (config.getInt("duration", 0) * 1000L);
     }
+
+
+    public final void callOnTick(Player p) {
+        // Active Tick
+        if (isActive(p)) {
+            onActiveTick(p);
+        }
+        // Active End
+        else if (activationTime.containsKey(p.getUniqueId())) {
+            onActiveEnd(p);
+            activationTime.remove(p.getUniqueId());
+        }
+        // Tick
+        onTick(p);
+    }
+
+    public final void callOnTrigger(Player p) {
+        activationTime.put(p.getUniqueId(), System.currentTimeMillis());
+        onTrigger(p);
+    }
+
+    public final void callOnUnequip(Player p) {
+        if (isActive(p)) onActiveEnd(p);
+        activationTime.remove(p.getUniqueId());
+        onUnequip(p);
+    }
+
 
     public void onEquip(Player p) {
     }
@@ -105,21 +136,23 @@ public abstract class Token extends Citem implements HasPlugin, Listener {
     public void onUnequip(Player p) {
     }
 
-    public void onTick(Player p) {
-    }
-
     public void onTrigger(Player p) {
     }
 
-    public void onJoin(Player p) {
+    public void onTick(Player p) {
     }
+
+    public void onActiveTick(Player p) {}
+
+    public void onActiveEnd(Player p) {}
+
 
     public int getBaseCooldown() {
         return config.getInt("cooldown");
     }
 
     public long secondsSinceLastUse(Player p) {
-        LocalDateTime lastUse = rmc.pdc().getLastUse(p, id);
+        LocalDateTime lastUse = rmc.pdc.getLastUse(p, id);
         int baseCooldown = getBaseCooldown();
 
         return Duration.between(lastUse, LocalDateTime.now()).toSeconds();
@@ -140,6 +173,7 @@ public abstract class Token extends Citem implements HasPlugin, Listener {
         return "■".repeat(filled) + "□".repeat(5 - filled);
     }
 
+
     protected int getSlot() {
         return switch (rarity) {
             case RARE, EPIC -> 0;
@@ -148,7 +182,7 @@ public abstract class Token extends Citem implements HasPlugin, Listener {
     }
 
     public String getSprite(Player p, int slot) {
-        String broken = rmc.pdc().getEquippedBroken(p, slot) ? "_broken" : "";
+        String broken = rmc.pdc.getEquippedBroken(p, slot) ? "_broken" : "";
         return String.format("items:rmc5/token%s/%s", broken, id.id().toLowerCase());
     }
 
@@ -164,6 +198,7 @@ public abstract class Token extends Citem implements HasPlugin, Listener {
         return config;
     }
 
+
     @Override
     public @NotNull ItemStack createItem() {
         return createItem(false);
@@ -175,8 +210,8 @@ public abstract class Token extends Citem implements HasPlugin, Listener {
 
     public @NotNull ItemStack createItem(boolean broken) {
         ItemStack ret = super.createItem();
-        rmc.pdc().setItemToken(ret, id);
-        rmc.pdc().setItemBroken(ret, broken);
+        rmc.pdc.setItemToken(ret, id);
+        rmc.pdc.setItemBroken(ret, broken);
 
         NamespacedKey newKey = getKey(broken);
 

@@ -6,6 +6,7 @@ import net.kyori.adventure.title.Title;
 import net.kyori.adventure.sound.Sound;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.WanderingTrader;
@@ -60,7 +61,7 @@ public class TraderSpawner {
                 rmc.rt.translatable("trader.onspawn.title"),
                 rmc.rt.translatable("trader.onspawn.subtitle")
         ));
-        audience.playSound(Sound.sound(Key.key("totem_of_undying"), Sound.Source.MASTER, 1f, 1f), Sound.Emitter.self());
+        audience.playSound(Sound.sound(new NamespacedKey("minecraft", "item.totem.use"), Sound.Source.MASTER, 1f, 1f), Sound.Emitter.self());
 
         setNextSpawn();
     }

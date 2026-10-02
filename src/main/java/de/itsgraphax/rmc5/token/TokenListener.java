@@ -21,7 +21,7 @@ public class TokenListener implements Listener {
             if (token.getId() != TokenIdentifier.UNKNOWN &&
             !pdcData.getEquippedBroken(p, slot)) {
                 pdcData.setEquippedBroken(e.getPlayer(), slot, true);
-                token.onUnequip(p);
+                token.callOnUnequip(p);
             }
         }
     }
